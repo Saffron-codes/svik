@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">1070598894785-8244s8fkb11ka1jrdij9idjg9b69qku4.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">1070598894785</string>
+    <string name="google_api_key" translatable="false">AIzaSyBa9m8uPn6vC4iMW_AEgAoLLf6AUl6geuk</string>
+    <string name="google_app_id" translatable="false">1:1070598894785:android:a915e1d7433dd3756a5040</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBa9m8uPn6vC4iMW_AEgAoLLf6AUl6geuk</string>
+    <string name="google_storage_bucket" translatable="false">chatbro-818b8.appspot.com</string>
+    <string name="project_id" translatable="false">chatbro-818b8</string>
+</resources>

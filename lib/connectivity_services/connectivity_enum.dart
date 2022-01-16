@@ -1,0 +1,6 @@
+enum ConnectivityStatus{
+  WiFi,
+  Cellular,
+  Offline,
+  unknown,
+}

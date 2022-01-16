@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1070598894785",
+    "project_id": "chatbro-818b8",
+    "storage_bucket": "chatbro-818b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070598894785:android:a915e1d7433dd3756a5040",
+        "android_client_info": {
+          "package_name": "com.javesindia.chatbro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070598894785-8244s8fkb11ka1jrdij9idjg9b69qku4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa9m8uPn6vC4iMW_AEgAoLLf6AUl6geuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070598894785-8244s8fkb11ka1jrdij9idjg9b69qku4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
