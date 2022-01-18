@@ -94,7 +94,8 @@ class _MessageListState extends State<MessageList> {
                     messagelist[idx].message,
                     messagelist[idx].from,
                     messagelist[idx].time,
-                    messagelist[idx].type));
+                    messagelist[idx].type,
+                    messagelist[idx].reactions));
           },
         )
       ],

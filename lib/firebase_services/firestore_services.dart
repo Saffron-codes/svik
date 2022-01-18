@@ -89,7 +89,7 @@ class FirestoreServices extends ChangeNotifier {
             .snapshots()
             .map((event) => event.docs
                 .map((DocumentSnapshot ds) => Message(ds.get("message"),
-                    ds.get("from"), ds.get("time"), ds.get("type")))
+                    ds.get("from"), ds.get("time"), ds.get("type"),ds.get("reactions")))
                 .toList())
         : null;
   }
@@ -105,7 +105,8 @@ class FirestoreServices extends ChangeNotifier {
       "from": message.from,
       "message": message.message,
       "time": Timestamp.now(),
-      "type": message.type
+      "type": message.type,
+      "reactions":[]
     });
     await _firestore
         .collection("Friends")

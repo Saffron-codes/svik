@@ -10,11 +10,17 @@ Future showFriendsSheet(BuildContext context,List<Friend> friends){
           borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
   builder:(context) {
     return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.3,
+          minChildSize: 0.2,
+          maxChildSize: friends.length.toDouble()<10?friends.length.toDouble()/10:0.9,
       builder:(context, scrollController) {
         return ListView.builder(
+          shrinkWrap: true,
           controller: scrollController,
           itemCount: friends.length,
           itemBuilder: (context, index) => ListTile(
+            onTap: () => print(friends.length.toDouble()/10),
             title: Text(friends[index].name),
             leading: CircleAvatar(backgroundImage: NetworkImage(friends[index].photourl),),
           ),

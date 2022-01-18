@@ -148,6 +148,7 @@ class _ChatPageState extends State<ChatPage> {
                                                 .toString(),
                                             Timestamp.now(),
                                             "text",
+                                            []
                                           ),
                                           widget.chatroomid,
                                           widget.friend.uid);
