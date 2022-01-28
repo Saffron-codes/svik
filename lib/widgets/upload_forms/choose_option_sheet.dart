@@ -14,11 +14,15 @@ Future showOption(BuildContext context) {
         return Wrap(
           children: [
             ListTile(
+              iconColor: Color(0xffD8D8D8),
+              textColor: Color(0xffD8D8D8),
               leading: Icon(Icons.camera_alt),
               title: Text("Camera"),
               onTap: () => Navigator.pushNamed(context, '/camera'),
             ),
             ListTile(
+              iconColor: Color(0xffD8D8D8),
+              textColor: Color(0xffD8D8D8),
               leading: Icon(Icons.image),
               title: Text("Choose File"),
               onTap: () {

@@ -3,6 +3,7 @@ import 'package:chatapp/bottomnavbar_provider/bottomnavbarprovider.dart';
 import 'package:chatapp/camera_provider/camera_provider.dart';
 import 'package:chatapp/connectivity_services/connectivity_enum.dart';
 import 'package:chatapp/connectivity_services/connectivity_services.dart';
+import 'package:chatapp/constants/theme/pallete.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
@@ -99,9 +100,13 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
-            primarySwatch: Colors.grey,
-            appBarTheme: appbartheme,
-            bottomNavigationBarTheme: bottomNavigationBarThemeData),
+          //primaryColor: Color(0xff78909c),
+            primarySwatch: Palette.kToDark,
+            appBarTheme: appBarTheme,
+            bottomNavigationBarTheme: bottomNavigationBarThemeData,
+            bottomSheetTheme: bottomSheetThemeData,
+            scaffoldBackgroundColor: Color(0xff141E29)),
+        
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {

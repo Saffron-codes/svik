@@ -45,10 +45,11 @@ class FirebaseStorageServices extends ChangeNotifier {
   upload_story_data() async {
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-    _firestore.collection("stories").doc(_auth.currentUser!.displayName).set({
+    _firestore.collection("stories").doc(_auth.currentUser!.uid).set({
       "name": _auth.currentUser!.displayName,
       "time": Timestamp.now(),
-      "url": urlDownload
+      "url": urlDownload,
+      "uid":_auth.currentUser!.uid
     });
   }
 
@@ -91,10 +92,15 @@ class FirebaseStorageServices extends ChangeNotifier {
     }
   }
 
-  change_name()async{
-    await _firestore.collection("users").doc(_auth.currentUser!.uid).update({"name":"Saffron Dionysius T"});
-
-    await _auth.currentUser!.updateDisplayName("Saffron Dionysius T").then((value)=>print("Updated Username"));
+  Future<String?> changeName(String name)async{
+    String response = "error";
+    await _firestore.collection("users").doc(_auth.currentUser!.uid).update({"name":name});
+    await _auth.currentUser!.updateDisplayName(name).then((value){
+      response = "success";
+    }).onError((error, stackTrace){
+      response = "error";
+    });
     await _auth.currentUser!.reload();
+    return response;
   }
 }

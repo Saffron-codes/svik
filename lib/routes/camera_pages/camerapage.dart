@@ -19,10 +19,10 @@ class CameraPage extends StatefulWidget {
   _CameraPageState createState() => _CameraPageState();
 }
 
-class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
+class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   late CameraController controller;
   int camera_state = 0;
-  double scale = 0;
+  double zoom = 1.15;
   var image = "";
 
   double _minAvailableZoom = 1.0;
@@ -33,10 +33,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
   void initState() {
     WidgetsBinding.instance!.addObserver(this);
     final camera_provider = context.read<CameraServices>();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    super.initState();
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     initialize_camera(camera_provider.camerastate);
     getImages();
+    super.initState();
   }
 
   @override
@@ -57,8 +57,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
     if (state == AppLifecycleState.inactive) {
       controller.dispose();
     } else if (state == AppLifecycleState.resumed) {
-        initialize_camera(camera_state);
-    }else if(state == AppLifecycleState.paused){
+      initialize_camera(camera_state);
+    } else if (state == AppLifecycleState.paused) {
       controller.dispose();
     }
   }
@@ -67,56 +67,85 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
   Widget build(BuildContext context) {
     final camera_provider = Provider.of<CameraServices>(context);
     final storage_services = context.watch<FirebaseStorageServices>();
+    final size = MediaQuery.of(context).size;
+    final deviceRatio = size.width / size.height;
+    final xScale = controller.value.aspectRatio / deviceRatio;
+    
+// Modify the yScale if you are in Landscape
+    final yScale = 1.0;
     if (!controller.value.isInitialized) {
       return Container();
     }
-    scale = 1 / (controller.value.aspectRatio * MediaQuery.of(context).size.aspectRatio);
+    Size mediaSize = MediaQuery.of(context).size;
+    double scale = 1.2/ (controller.value.aspectRatio * mediaSize.aspectRatio);
     //print(scale);
     return Material(
       child: Stack(
         children: [
-        Center(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onDoubleTap: (){
-              if (camera_state == 1)
-                  camera_state = 0;
-                else
-                  camera_state = 1;
-                camera_provider.change_camera(camera_state);
-                initialize_camera(camera_state);
+          // GestureDetector(
+          //   behavior: HitTestBehavior.opaque,
+          //   onDoubleTap: () {
+          //     if (camera_state == 1)
+          //       camera_state = 0;
+          //     else
+          //       camera_state = 1;
+          //     camera_provider.change_camera(camera_state);
+          //     initialize_camera(camera_state);
+          //   },
+          //   child: CameraPreview(controller),
+          // ),
+          // AspectRatio(
+          //   aspectRatio:0.6,
+          //   child: CameraPreview(controller),
+          // ),
+          // CameraPreview(controller),
+          
+          GestureDetector(
+            onDoubleTap: () {
+              if (camera_state == 1) {
+                camera_state = 0;
+              } else {
+                camera_state = 1;
+              }
+              camera_provider.change_camera(camera_state);
+              initialize_camera(camera_state);
             },
-            onScaleStart: (ScaleStartDetails details){
-              _baseScale = _currentScale;
+            onScaleUpdate: (details) {
+              if(details.scale>=1.0){
+              controller.setZoomLevel(details.scale);
+              }
             },
-            onScaleUpdate:_handleScaleUpdate,
-                child: Transform.scale(
-                  scale: scale,
-                  child: CameraPreview(controller),
-                ),
+            child: Center(
+              child: Transform.scale(
+                scale: scale,
+                //alignment: Alignment.center,
+                child: CameraPreview(controller),
               ),
             ),
+          ),
+
           Positioned(
               left: 10,
               top: 20,
               child: IconButton(
-                  onPressed: ()=>Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false),
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (route) => false),
                   icon: Icon(
                     Icons.close,
                     color: Colors.white,
                   ))),
-
           Positioned(
               left: 10,
               bottom: 50,
               child: IconButton(
                   onPressed: () {
-                    if (camera_state == 1)
-                  camera_state = 0;
-                else
-                  camera_state = 1;
-                camera_provider.change_camera(camera_state);
-                initialize_camera(camera_state);
+                    if (camera_state == 1) {
+                      camera_state = 0;
+                    } else {
+                      camera_state = 1;
+                    }
+                    camera_provider.change_camera(camera_state);
+                    initialize_camera(camera_state);
                   },
                   icon: Icon(
                     Icons.camera_front,
@@ -126,13 +155,14 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
             bottom: 50,
             left: 180,
             child: GestureDetector(
-              onTap: ()async{
-                XFile file  = await controller.takePicture();
+              onTap: () async {
+                XFile file = await controller.takePicture();
                 getImages();
                 storage_services.change_file(file.path);
-      Navigator.pushNamed(context, '/story_upload',arguments: storage_services.file!.path);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                  overlays: SystemUiOverlay.values);
+                Navigator.pushNamed(context, '/story_upload',
+                    arguments: storage_services.file!.path);
+                // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                //     overlays: SystemUiOverlay.values);
               },
               child: CircleAvatar(
                 radius: 25,
@@ -147,27 +177,30 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
             right: 10,
             bottom: 50,
             child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/memories');
-                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                    overlays: SystemUiOverlay.values);
-              },
-              child: camera_provider.last_image.isNotEmpty?ClipOval(
-                child: Image.file(
-                  File(camera_provider.last_image),
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
+                onTap: () {
+                  Navigator.pushNamed(context, '/memories');
+
+                  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                  //     overlays: []);
+                },
+                child: camera_provider.last_image.isNotEmpty
+                    ? ClipOval(
+                        child: Image.file(
+                          File(camera_provider.last_image),
+                          height: 50,
+                          width: 50,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : CircleAvatar()
+                // Container(
+                //   height: 50,
+                //   width: 50,
+                //   decoration: camera_provider.last_image.isNotEmpty?BoxDecoration(
+                //     image: DecorationImage(image: FileImage(File(camera_provider.last_image)))
+                //   ):BoxDecoration(color: Colors.white)
+                // ),
                 ),
-              ):CircleAvatar()
-              // Container(
-              //   height: 50,
-              //   width: 50,
-              //   decoration: camera_provider.last_image.isNotEmpty?BoxDecoration(
-              //     image: DecorationImage(image: FileImage(File(camera_provider.last_image)))
-              //   ):BoxDecoration(color: Colors.white)
-              // ),
-            ),
           )
         ],
       ),
@@ -176,18 +209,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
 
   initialize_camera(int index) {
     controller = CameraController(
-        widget.cameras[index],
-        ResolutionPreset.veryHigh,
-        enableAudio: false,
-        imageFormatGroup: ImageFormatGroup.unknown);
+        widget.cameras[index], ResolutionPreset.veryHigh,
+        enableAudio: false, imageFormatGroup: ImageFormatGroup.unknown);
     controller.unlockCaptureOrientation();
     controller.initialize().then((value) => null).then((_) {
-      controller
-            .getMaxZoomLevel()
-            .then((value) => _maxAvailableZoom = value);
-        controller
-            .getMinZoomLevel()
-            .then((value) => _minAvailableZoom = value);
+      controller.getMaxZoomLevel().then((value) => _maxAvailableZoom = value);
+      controller.getMinZoomLevel().then((value) => _minAvailableZoom = value);
+      print(_minAvailableZoom);
       if (!mounted) {
         return;
       }
@@ -200,7 +228,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
     final directory = await getApplicationDocumentsDirectory();
     print(directory);
     final _filelist = directory.listSync(followLinks: false, recursive: true);
-    if(_filelist.last.path.endsWith("jpg") || _filelist.last.path.endsWith("png")){
+    if (_filelist.last.path.endsWith("jpg") ||
+        _filelist.last.path.endsWith("png")) {
       camera_provider.change_last_image(_filelist.last.path);
     }
     // setState(() {
@@ -212,15 +241,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver  {
     ////data/user/0/com.javesindia.chatbro/app_flutter
   }
 
-  Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
-    // When there are not exactly two fingers on screen don't scale
+  // Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
+  //   // When there are not exactly two fingers on screen don't scale
 
-    _currentScale = (_baseScale * details.scale)
-        .clamp(_minAvailableZoom, _maxAvailableZoom);
-    print(_minAvailableZoom);
-    setState(() {
-      scale = 2.0;
-    });
-    setState(() {});
-  }
+  //   _currentScale = (_baseScale * details.scale)
+  //       .clamp(_minAvailableZoom, _maxAvailableZoom);
+  //   print(_minAvailableZoom);
+  //   setState(() {
+  //     scale = 2.0;
+  //   });
+  //   setState(() {});
+  // }
 }

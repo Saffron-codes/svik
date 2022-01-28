@@ -5,7 +5,8 @@ class Message{
   String from;
   Timestamp time;
   String type;
-  List<dynamic> reactions;
+  String reactions;
+  String id;
 
-  Message(this.message,this.from,this.time,this.type,this.reactions);
+  Message(this.message,this.from,this.time,this.type,this.reactions,this.id);
 }

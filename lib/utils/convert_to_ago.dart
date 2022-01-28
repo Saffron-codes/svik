@@ -8,20 +8,20 @@ String convertToAgo(DateTime input) {
     }
     else if (difference.inDays>=1 && difference.inDays<30) {
       if(difference.inDays == 1){
-        return '${difference.inDays} day ago'; 
+        return '${difference.inDays} d ago'; 
       }
-      return '${difference.inDays} days ago';
+      return '${difference.inDays} d ago';
     }
      else if (difference.inHours >= 1 && difference.inHours<24) {
        if(difference.inDays == 1){
-        return '${difference.inHours} hour ago'; 
+        return '${difference.inHours} h ago'; 
       }
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours} h ago';
     } else if (difference.inMinutes >= 1 && difference.inMinutes <60) {
       if(difference.inMinutes == 1){
-        return '${difference.inMinutes} min ago';
+        return '${difference.inMinutes} m ago';
       }
-      return '${difference.inMinutes} mins ago';
+      return '${difference.inMinutes} m ago';
     } else if (difference.inSeconds >= 1 && difference.inSeconds <60) {
       return '${difference.inSeconds} sec ago';
     }

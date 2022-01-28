@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chatapp/models/story.dart';
 import 'package:chatapp/utils/convert_to_ago.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +33,7 @@ class _ViewStoryState extends State<ViewStory> {
                     if (index != _stories.length - 1) {
                       _pageController.animateToPage(index + 1,
                           duration: Duration(seconds: 2),
-                          curve: Curves.fastOutSlowIn);
+                          curve: Curves.fastLinearToSlowEaseIn);
                     } else if (index == _stories.length - 1) {
                       print("Last Story");
                       Navigator.pop(context);
@@ -59,12 +61,29 @@ class _ViewStoryState extends State<ViewStory> {
                           fit: BoxFit.cover,
                           loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
+                        print(loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!);
+                        loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes! == 0.0?Center(
+                                      child: CircularProgressIndicator(
+                                        color: Color(0xff0181FF),
+                                      ),
+                                    ):Center(
                           child: CircularProgressIndicator(
+                            color: Color(0xff0181FF),
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
                                     loadingProgress.expectedTotalBytes!
                                 : null,
+                          ),
+                        );
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xff0181FF),
+                            // value: loadingProgress.expectedTotalBytes != null
+                            //     ? loadingProgress.cumulativeBytesLoaded /
+                            //         loadingProgress.expectedTotalBytes!
+                            //     : null,
                           ),
                         );
                       }),
@@ -106,10 +125,29 @@ class _ViewStoryState extends State<ViewStory> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            convertToAgo(_stories[index].time.toDate()),
-                            style: TextStyle(color: Colors.black, fontSize: 12)
-                          ),
+                          Text(convertToAgo(_stories[index].time.toDate()),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  inherit: true,
+                                  shadows: const[
+                                    Shadow(
+                                        // bottomLeft
+                                        offset: Offset(-0.7, -0.7),
+                                        color: Colors.black),
+                                    Shadow(
+                                        // bottomRight
+                                        offset: Offset(0.7, -0.7),
+                                        color: Colors.black),
+                                    Shadow(
+                                        // topRight
+                                        offset: Offset(0.7, 0.7),
+                                        color: Colors.black),
+                                    Shadow(
+                                        // topLeft
+                                        offset: Offset(-0.7, 0.7),
+                                        color: Colors.black),
+                                  ])),
                         ],
                       ),
                     )

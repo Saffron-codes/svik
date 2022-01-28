@@ -46,7 +46,7 @@ class FirestoreServices extends ChangeNotifier {
         .snapshots()
         .map((event) => event.docs
             .map((DocumentSnapshot ds) =>
-                Story(ds.get("url"), ds.get("time"), ds.get("name")))
+                Story(ds.get("url"), ds.get("time"), ds.get("name"),ds.get("uid")))
             .toList());
   }
 
@@ -89,7 +89,7 @@ class FirestoreServices extends ChangeNotifier {
             .snapshots()
             .map((event) => event.docs
                 .map((DocumentSnapshot ds) => Message(ds.get("message"),
-                    ds.get("from"), ds.get("time"), ds.get("type"),ds.get("reactions")))
+                    ds.get("from"), ds.get("time"), ds.get("type"),ds.get("reactions"),ds.get("id")))
                 .toList())
         : null;
   }
@@ -100,13 +100,16 @@ class FirestoreServices extends ChangeNotifier {
         .collection("chats")
         .doc(chatroomid)
         .collection("Chats")
-        .doc()
-        .set({
+        .add({
       "from": message.from,
       "message": message.message,
       "time": Timestamp.now(),
       "type": message.type,
-      "reactions":[]
+      "reactions":"",
+      "id":""
+    }).then((value){
+      print(value.id);
+      value.update({"id":value.id});
     });
     await _firestore
         .collection("Friends")
@@ -121,7 +124,7 @@ class FirestoreServices extends ChangeNotifier {
         .collection("Friends")
         .doc(receiverid)
         .collection("Friends")
-        .doc(_auth.currentUser!.displayName)
+        .doc(_auth.currentUser!.uid)
         .update({
       "lastmessage": message.message,
       "lastmessagetime": Timestamp.now()
@@ -135,7 +138,7 @@ class FirestoreServices extends ChangeNotifier {
         .collection("Friends")
         .doc(receiver)
         .collection("Friends")
-        .doc(_auth.currentUser!.displayName)
+        .doc(_auth.currentUser!.uid)
         .get();
     if (doc.exists) {
       //friend_provider.isfriend = true;
@@ -144,6 +147,19 @@ class FirestoreServices extends ChangeNotifier {
       //friend_provider.isfriend = false;
       return false;
     }
+  }
+
+  Future<bool> addReactions(String chatroomid,String id,String emoji)async{
+    bool isdone = false;
+    await _firestore
+        .collection("chats")
+        .doc(chatroomid)
+        .collection("Chats")
+        .doc(id)
+        .update({
+          "reactions":emoji
+        }).then((value) => isdone = true);
+    return isdone;
   }
 
   // Future<List<Friend>> getFriends(String uid) {
@@ -183,4 +199,10 @@ class FirestoreServices extends ChangeNotifier {
                 ds.get("uid")))
             .toList());
   }
+
+  // Stream<List<UserModel>> get getUsers {
+  //   return _firestore
+  //   .collection("users")
+  //   .snapshots()
+  // }
 }

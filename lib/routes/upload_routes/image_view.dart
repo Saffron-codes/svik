@@ -75,6 +75,8 @@ class _Story_UploadState extends State<Story_Upload> {
                           builder: (context) => Wrap(
                             children: [
                               ListTile(
+                                iconColor: Color(0xffD8D8D8),
+                                  textColor: Color(0xffD8D8D8),
                                 leading: Icon(Icons.add_a_photo),
                                 title: Text("Add Story"),
                                 onTap: () {
@@ -91,6 +93,8 @@ class _Story_UploadState extends State<Story_Upload> {
                                 },
                               ),
                               ListTile(
+                                iconColor: Color(0xffD8D8D8),
+                                  textColor: Color(0xffD8D8D8),
                                 leading: Icon(Icons.post_add),
                                 title: Text("Upload Post"),
                                 onTap: (){

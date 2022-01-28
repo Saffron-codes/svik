@@ -20,12 +20,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<BottomNavigationBarItem> _tabs = [
     BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        label: "Home",
-        activeIcon: Icon(Icons.home_filled)),
+        label: "Home",),
     BottomNavigationBarItem(
-        icon: Icon(Icons.chat_bubble),
+        icon: Icon(Icons.chat),
         label: "Chats",
-        activeIcon: Icon(Icons.chat)),
+),
     BottomNavigationBarItem(
         icon: Icon(Icons.search_outlined), label: "Explore"),
     BottomNavigationBarItem(
@@ -77,7 +76,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         body: navbarprovider.currentscreen,
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          selectedIconTheme: IconThemeData(size: 30),
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          //selectedIconTheme: IconThemeData(size: 30),
           currentIndex: navbarprovider.getcurrentIndex,
           items: _tabs,
           onTap: (int idx) {

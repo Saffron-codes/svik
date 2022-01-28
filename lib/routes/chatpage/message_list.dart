@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 
 class MessageList extends StatefulWidget {
   final Friend friend;
-  const MessageList({Key? key, required this.friend}) : super(key: key);
+  final String chatroomid;
+  const MessageList({Key? key, required this.friend,required this.chatroomid}) : super(key: key);
 
   @override
   _MessageListState createState() => _MessageListState();
@@ -28,8 +29,6 @@ class _MessageListState extends State<MessageList> {
 
   @override
   void initState() {
-    //_scrollToBottom();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -42,7 +41,7 @@ class _MessageListState extends State<MessageList> {
     return ListView(
       controller: _scrollcontroller,
       shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
+      physics: BouncingScrollPhysics(),
       children: [
         Container(
           height: 100,
@@ -70,7 +69,7 @@ class _MessageListState extends State<MessageList> {
                 left: 100,
                 child: Text(
                   "Begining of chat with ${friend.name}",
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 13,color: Color(0xffD8D8D8)),
                 ),
               ),
               Positioned(
@@ -86,7 +85,7 @@ class _MessageListState extends State<MessageList> {
         ),
         ListView.builder(
           shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           itemCount: messagelist.length,
           itemBuilder: (_, idx) {
             return MessageWidget(
@@ -95,7 +94,8 @@ class _MessageListState extends State<MessageList> {
                     messagelist[idx].from,
                     messagelist[idx].time,
                     messagelist[idx].type,
-                    messagelist[idx].reactions));
+                    messagelist[idx].reactions,
+                    messagelist[idx].id), chatroomid: widget.chatroomid,);
           },
         )
       ],

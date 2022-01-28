@@ -1,4 +1,5 @@
 import 'package:chatapp/bottomnavbar_provider/bottomnavbarprovider.dart';
+import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
@@ -36,7 +37,8 @@ class _ProfileTabState extends State<ProfileTab> {
                   (context, index) {
                     return Container(
                       alignment: Alignment.center,
-                      color: Colors.teal[100 * (index % 9)],
+                      color: Color(0xff141E29),
+                      //color: Colors.teal[100 * (index % 9)],
                       child: Text('grid item $index'),
                     );
                   },
@@ -44,8 +46,8 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 1,
+                  crossAxisSpacing: 1,
                   childAspectRatio: 2.0,
                 ),
               ),
@@ -64,7 +66,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print((1 - shrinkOffset / expandedHeight));
+    //print((1 - shrinkOffset / expandedHeight));
     UserModel currentUser = Provider.of<UserModel>(context);
     List<Friend> friendslist = Provider.of<List<Friend>>(context);
     //print(currentUser.name);
@@ -107,7 +109,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                 top: (1 - shrinkOffset / expandedHeight) <= 0.8224758209391703
                     ? 10
                     : expandedHeight / 4.6 - shrinkOffset * 0.7,
-                left: 100,
+                left: currentUser.name!.length <=14?currentUser.name!.length<=5?165:145:110,
                 right: MediaQuery.of(context).size.width / 4,
                 child: Opacity(
                   opacity:
@@ -116,7 +118,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                           : (1 - shrinkOffset / expandedHeight),
                   child: Text(
                     currentUser.name.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Color(0xffD8D8D8)),
                   ),
                 ),
               ),
@@ -130,26 +132,26 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                     children: [
                       Text("Friends",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15)),
-                      Text(friendslist.length.toString())
+                              fontWeight: FontWeight.bold, fontSize: 15,color: Color(0xffD8D8D8))),
+                      Text(friendslist.length.toString(),style: chatTextName,)
                     ],
                   ),
                 ),
               ),
               //Message button
-              Positioned(
-                  top: expandedHeight / 1.5 - shrinkOffset,
-                  right: 49,
-                  child: Opacity(
-                    opacity: (1 - shrinkOffset / expandedHeight) <=
-                            0.36265196774732344
-                        ? 0.0
-                        : (1 - shrinkOffset / expandedHeight),
-                    child: IconButton(
-                      icon: Icon(Icons.chat_bubble_outline),
-                      onPressed: () => null,
-                    ),
-                  )),
+              // Positioned(
+              //     top: expandedHeight / 1.5 - shrinkOffset,
+              //     right: 49,
+              //     child: Opacity(
+              //       opacity: (1 - shrinkOffset / expandedHeight) <=
+              //               0.36265196774732344
+              //           ? 0.0
+              //           : (1 - shrinkOffset / expandedHeight),
+              //       child: IconButton(
+              //         icon: Icon(Icons.chat_bubble_outline),
+              //         onPressed: () => null,
+              //       ),
+              //     )),
                   Positioned(
                     top: expandedHeight / 1.5 - shrinkOffset,
                     right: 0,
@@ -160,7 +162,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                         : (1 - shrinkOffset / expandedHeight),
                         child: IconButton(
                 onPressed: () => AuthService().signOut(),
-                icon: Icon(Icons.logout_outlined))
+                icon: Icon(Icons.logout_outlined),color: Color(0xff209EF1),)
                     ),
                   ),
                   Positioned(
@@ -171,6 +173,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                 ? 0.0
                 : (1 - shrinkOffset / expandedHeight),
             child: IconButton(
+              color: Color(0xff209EF1),
               onPressed: () {
                 editUserSheet(context,currentUser);
               },

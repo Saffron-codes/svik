@@ -1,7 +1,10 @@
+import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/widgets/bottom_sheets/friends_list_sheet.dart';
+import 'package:chatapp/widgets/dialogs/no_friend_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -18,13 +21,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     //getFriends(friend);
     super.initState();
+    
   }
   @override
   Widget build(BuildContext context) {
     Friend friend = ModalRoute.of(context)!.settings.arguments as Friend;
-    List<String> names = friend.name.split(" ");
-    //final friends = getFriends(friend);
-    //print(friends);
+    
     return StreamProvider<List<Friend>>(
       create: (context) => FirestoreServices().getFriends(friend.uid),
       initialData: [],
@@ -38,19 +40,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 floating: true,
                 delegate: CustomAppBar(expandedHeight: 170, friend: friend),
               ),
-              SliverGrid(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return Container(
-                    color: Colors.amber,
-                  );
-                }, childCount: 20),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  childAspectRatio: 2.0,
-                ),
-              ),
+              // SliverGrid(
+              //   delegate: SliverChildBuilderDelegate((context, index) {
+              //     return Container(
+              //       color: Colors.amber,
+              //     );
+              //   }, childCount: 20),
+              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     mainAxisSpacing: 15,
+              //     crossAxisSpacing: 15,
+              //     childAspectRatio: 2.0,
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -59,11 +61,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class CustomAppBar extends SliverPersistentHeaderDelegate {
+class CustomAppBar extends SliverPersistentHeaderDelegate{
   final double expandedHeight;
   final Friend friend;
   CustomAppBar({required this.expandedHeight, required this.friend});
 
+  
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -78,6 +81,7 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
         ),
         //the flexible animated appbar
         AppBar(
+          backgroundColor: Color(0xff13202D),
           automaticallyImplyLeading: false,
           flexibleSpace: Stack(
             children: [
@@ -86,7 +90,7 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
                 top: 3,
                 child: IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.arrow_back)),
+                    icon: Icon(Icons.arrow_back,color: Color(0xffD8D8D8),)),
               ),
               //the animated profile
               Positioned(
@@ -115,16 +119,16 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
                 top: (1 - shrinkOffset / expandedHeight) <= 0.8224758209391703
                     ? 10
                     : expandedHeight / 4.6 - shrinkOffset * 0.7,
-                left: MediaQuery.of(context).size.width / 2.8,
-                right: MediaQuery.of(context).size.width / 4,
+                left: friend.name.length <=14?friend.name.length<=5?165:145:110,
+                //right: MediaQuery.of(context).size.width / 4,
                 child: Opacity(
                   opacity:
                       (1 - shrinkOffset / expandedHeight) <= 0.8758055335060152
                           ? 1.0
                           : (1 - shrinkOffset / expandedHeight),
                   child: Text(
-                    friend.name.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    friend.name.length>=20?"${friend.name.substring(0,15)}....":friend.name.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Color(0xffD8D8D8)),
                   ),
                 ),
               ),
@@ -136,13 +140,15 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
                   opacity: (1 - shrinkOffset / expandedHeight),
                   child: Consumer<List<Friend>>(
                     builder:(context,value,child)=> InkWell(
-                      onTap: () => showFriendsSheet(context, value),
+                      onTap: () {
+                        value.length>0?showFriendsSheet(context, value):showNoFriendDialog(context);
+                      },
                       child: Column(
                         children: [
                           Text("Friends",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15)),
-                          Text(value.length.toString())
+                                  fontWeight: FontWeight.bold, fontSize: 15,color: Color(0xffD8D8D8))),
+                          Text(value.length.toString(),style: chatTextName,)
                         ],
                       ),
                     ),
@@ -179,7 +185,7 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
                         ? 0.0
                         : (1 - shrinkOffset / expandedHeight),
                     child: IconButton(
-                      icon: Icon(Icons.chat_bubble_outline),
+                      icon: Icon(Icons.chat_bubble_outline,color: Color(0xffD8D8D8),),
                       onPressed: () => null,
                     ),
                   )),
@@ -191,11 +197,9 @@ class CustomAppBar extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => expandedHeight;
 
   @override
-  // TODO: implement minExtent
   double get minExtent => kToolbarHeight;
 
   @override

@@ -1,3 +1,4 @@
+import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
@@ -27,16 +28,32 @@ class _HomeTabState extends State<HomeTab> {
       initialData: [],
       child: Scaffold(
           appBar: AppBar(
+            elevation: 2,
             title: Text("AIO"),
             actions: [
               PopupMenuButton(
+                tooltip: "Add Something",
+                color: Color(0xff141E29),
                 itemBuilder: (context) => [
-                  PopupMenuItem(child: Text("Post"),value: "Post",),
-                  PopupMenuItem(child: Text("Story"),value: "Story",),
-                  PopupMenuItem(child: Text("Memos"),value: "Memos",)
+                  PopupMenuItem(
+                    textStyle: chatTextName,
+                    child: Text("Post"),
+                    value: "Post",
+                  ),
+                  PopupMenuItem(
+                    textStyle: chatTextName,
+                    child: Text("Story"),
+                    value: "Story",
+                  ),
+                  PopupMenuItem(
+                    textStyle: chatTextName,
+                    child: Text("Memos"),
+                    value: "Memos",
+                  )
                 ],
                 icon: Icon(Icons.add),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 onSelected: (value) {
                   print(value.toString());
                   showOption(context);
@@ -51,7 +68,7 @@ class _HomeTabState extends State<HomeTab> {
                 height: 2,
               ),
               Container(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: EdgeInsets.only(left: 5, top: 10),
                   height: 80,
                   child: ListView(
                     shrinkWrap: true,
@@ -67,12 +84,16 @@ class _HomeTabState extends State<HomeTab> {
                             builder: (context) => Wrap(
                               children: [
                                 ListTile(
+                                  iconColor: Color(0xffD8D8D8),
+                                  textColor: Color(0xffD8D8D8),
                                   leading: Icon(Icons.camera_alt),
                                   title: Text("Camera"),
                                   onTap: () =>
                                       Navigator.pushNamed(context, '/camera'),
                                 ),
                                 ListTile(
+                                  iconColor: Color(0xffD8D8D8),
+                                  textColor: Color(0xffD8D8D8),
                                   leading: Icon(Icons.image),
                                   title: Text("Choose File"),
                                   onTap: () {
@@ -90,12 +111,13 @@ class _HomeTabState extends State<HomeTab> {
                         },
                         child: Stack(children: [
                           Positioned(
-                            child: currentUser !=null?CircleAvatar(
-                              radius: 35,
-                              backgroundImage:
-                                  NetworkImage(currentUser.photourl.toString()),
-                            ):CircleAvatar()
-                          ),
+                              child: currentUser != null
+                                  ? CircleAvatar(
+                                      radius: 35,
+                                      backgroundImage: NetworkImage(
+                                          currentUser.photourl.toString()),
+                                    )
+                                  : CircleAvatar()),
                           Positioned(
                               top: 44,
                               left: 46,

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -29,13 +30,27 @@
   <title>chatapp</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+       <!-- <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-app.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-auth.js"></script> -->
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
+    // const firebaseConfig = {
+    //   apiKey: "AIzaSyDyLQBWL57RK0KkxJib8VSviSWzA1OFXbc",
+    //   authDomain: "chatbro-818b8.firebaseapp.com",
+    //   projectId: "chatbro-818b8",
+    //   storageBucket: "chatbro-818b8.appspot.com",
+    //   messagingSenderId: "1070598894785",
+    //   appId: "1:1070598894785:web:56eed9e86e351b1a6a5040",
+    //   measurementId: "G-JNJEN37FD4"
+    // };
+
+    // firebase.initializeApp(firebaseConfig);
     function loadMainDartJs() {
       if (scriptLoaded) {
         return;
@@ -98,4 +113,5 @@
     }
   </script>
 </body>
+
 </html>

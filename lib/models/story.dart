@@ -4,5 +4,6 @@ class Story{
   String url;
   Timestamp time;
   String name;
-  Story(this.url,this.time,this.name);
+  String uid;
+  Story(this.url,this.time,this.name,this.uid);
 }
