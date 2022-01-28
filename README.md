@@ -3,3 +3,4 @@
 Getting built using flutter & firebase 
 
 Add your suggestions and work with me :)
+  - Functionalities remaining
