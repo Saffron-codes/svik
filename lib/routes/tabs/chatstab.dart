@@ -1,7 +1,5 @@
 import 'package:chatapp/firebase_services/firestore_services.dart';
-import 'package:chatapp/models/chatroom_id.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/routes/chatpage/chatpage.dart';
 import 'package:chatapp/routes/chatpage/userchat_list.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

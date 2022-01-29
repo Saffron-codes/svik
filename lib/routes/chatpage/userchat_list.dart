@@ -1,5 +1,5 @@
 import 'package:chatapp/constants/theme_constants.dart';
-import 'package:chatapp/models/chatroom_id.dart';
+import 'package:chatapp/utils/chatroom_id.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/models/search_user.dart';
 import 'package:chatapp/routes/chatpage/chatpage.dart';

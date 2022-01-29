@@ -7,34 +7,25 @@ import 'package:chatapp/constants/theme/pallete.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
-import 'package:chatapp/models/chatroom_id.dart';
-import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/message.dart';
 import 'package:chatapp/models/search_user.dart';
 import 'package:chatapp/models/story.dart';
 import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/routes/camera_pages/camerapage.dart';
 import 'package:chatapp/routes/camera_pages/memories_page.dart';
-import 'package:chatapp/routes/chatpage/chatpage.dart';
 import 'package:chatapp/routes/firebase/wrapper.dart';
-import 'package:chatapp/routes/mainpage.dart';
 import 'package:chatapp/routes/profile_pages/profile_page.dart';
 import 'package:chatapp/routes/storypages/view_story_page.dart';
 import 'package:chatapp/routes/tabs/chats_tab/chat_page.dart';
-import 'package:chatapp/routes/tabs/profile.dart';
 import 'package:chatapp/routes/upload_routes/image_view.dart';
 import 'package:chatapp/routes/user_validation/loginpage.dart';
 import 'package:chatapp/routes/view_images/memo_view_page.dart';
 import 'package:chatapp/story_provider/story_provider.dart';
 import 'package:chatapp/user_profile_provider/banner_color.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_services/firebaseauth_services.dart';
-import 'routes/storypages/main_story_page.dart';
 
 List<CameraDescription> cameras = [];
 void main() async {
