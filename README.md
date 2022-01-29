@@ -14,7 +14,7 @@ Add your suggestions and work with me :)
     - Profile picture
   * View Profile Page of Friends & Users
   * Add reactions to chats with friends
-## ScreenShots
+## Screenshots
 <p>
 <img src="ss/chatTab.jpg" width="400"/>
- </p>
+</p>
