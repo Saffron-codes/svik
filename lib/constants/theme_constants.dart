@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 
 // AppBarTheme appbartheme = AppBarTheme(
 //     systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.grey));
-
+final Color themeBlueColor = Color(0xff209EF1);
+final Color themeWhiteColor = Color(0xffD8D8D8);
+final Color chatPageBg = Color(0xff242232);
 BottomNavigationBarThemeData bottomNavigationBarThemeData = BottomNavigationBarThemeData(
   unselectedItemColor: Color(0xffD8D8D8),
     selectedItemColor: Color(0xff209EF1),

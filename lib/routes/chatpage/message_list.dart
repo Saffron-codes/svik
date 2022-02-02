@@ -60,7 +60,7 @@ class _MessageListState extends State<MessageList> {
                 top: 25,
                 left: 180,
                 child: Text(
-                  "❤️",
+                  "⚡",
                   style: TextStyle(fontSize: 20),
                 ),
               ),

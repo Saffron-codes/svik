@@ -1,3 +1,4 @@
+import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/models/message.dart';
@@ -113,6 +114,10 @@ class _ChatPageState extends State<ChatPage> {
                             friend: widget.friend,
                             chatroomid: widget.chatroomid,
                           ),
+                        ),
+                        Container(
+                          height: 0.2,
+                          color: themeBlueColor,
                         ),
                         SizedBox(
                           height: 60,
