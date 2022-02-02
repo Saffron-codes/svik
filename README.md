@@ -21,4 +21,3 @@ Add your suggestions and work with me  🛠️
 
   ## ScreenShots 📸
   <img src="ss/chatTab.jpg" width="400"/>
-
