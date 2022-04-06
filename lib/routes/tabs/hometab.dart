@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
@@ -28,8 +29,8 @@ class _HomeTabState extends State<HomeTab> {
       initialData: [],
       child: Scaffold(
           appBar: AppBar(
-            elevation: 2,
-            title: Text("AIO"),
+            elevation: 0,
+            title: Text("Svik"),
             actions: [
               PopupMenuButton(
                 tooltip: "Add Something",
@@ -114,8 +115,7 @@ class _HomeTabState extends State<HomeTab> {
                               child: currentUser != null
                                   ? CircleAvatar(
                                       radius: 35,
-                                      backgroundImage: NetworkImage(
-                                          currentUser.photourl.toString()),
+                                      backgroundImage: CachedNetworkImageProvider(currentUser.photourl.toString()),
                                     )
                                   : CircleAvatar()),
                           Positioned(

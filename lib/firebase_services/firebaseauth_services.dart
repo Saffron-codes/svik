@@ -18,7 +18,7 @@ class AuthService {
   Stream<UserModel> get userprofile{
     return _firestore.collection("users")
     .doc(_auth.currentUser!.uid)
-    .snapshots().map((event) => UserModel(event.get("name"), event.get("email"), event.get("photourl"), ""));
+    .snapshots().map((event) => UserModel(event.get("name"), event.get("email"), event.get("photourl")));
   }
 
   Stream<User?> get user=>_auth.authStateChanges();

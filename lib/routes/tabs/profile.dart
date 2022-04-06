@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/bottomnavbar_provider/bottomnavbarprovider.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebaseauth_services.dart';
@@ -82,28 +83,59 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
           flexibleSpace: Stack(
             children: [
               //the animated profile
+
               Positioned(
-                top: (1 - shrinkOffset / expandedHeight) <= 0.49510674298128043
-                    ? 6
-                    : expandedHeight / 2.6 - shrinkOffset * 0.7,
-                left: (1 - shrinkOffset / expandedHeight) <= 0.49510674298128043
-                    ? 10
-                    : expandedHeight / 1.1 - shrinkOffset * 1.7,
-                child: Opacity(
-                  opacity:
-                      (1 - shrinkOffset / expandedHeight) <= 0.48235398562833964
-                          ? 1.0
-                          : (1 - shrinkOffset / expandedHeight),
-                  child: CircleAvatar(
-                    radius: (1 - shrinkOffset / expandedHeight) <=
-                            0.48235398562833964
-                        ? 20
-                        : (1 - shrinkOffset / expandedHeight) * 46,
-                    backgroundImage:
-                        NetworkImage(currentUser.photourl.toString()),
+                top: 80,
+                left: 100,
+                child: CachedNetworkImage(
+                  imageUrl: currentUser.photourl.toString(),
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 80,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                      ),
+                    ),
                   ),
                 ),
               ),
+              // Positioned(
+              //   top: (1 - shrinkOffset / expandedHeight) <= 0.49510674298128043
+              //       ? 6
+              //       : expandedHeight / 2.6 - shrinkOffset * 0.7,
+              //   left: (1 - shrinkOffset / expandedHeight) <= 0.49510674298128043
+              //       ? 10
+              //       : expandedHeight / 1.1 - shrinkOffset * 1.7,
+              //   child: Opacity(
+              //     opacity:
+              //         (1 - shrinkOffset / expandedHeight) <= 0.48235398562833964
+              //             ? 1.0
+              //             : (1 - shrinkOffset / expandedHeight),
+              //             child: CachedNetworkImage(
+              //   imageUrl: currentUser.photourl.toString(),
+              //   imageBuilder: (context, imageProvider) => Container(
+              //     height: 50,
+              //     width: 50,
+              //     decoration: BoxDecoration(
+              //       shape: BoxShape.circle,
+              //       image: DecorationImage(
+              //         image: imageProvider,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              //     // child: CircleAvatar(
+              //     //   radius: (1 - shrinkOffset / expandedHeight) <=
+              //     //           0.48235398562833964
+              //     //       ? 20
+              //     //       : (1 - shrinkOffset / expandedHeight) * 46,
+              //     //   backgroundImage:
+              //     //       NetworkImage(currentUser.photourl.toString()),
+              //     // ),
+              //   ),
+              // ),
               //the animated display name
               Positioned(
                 top: (1 - shrinkOffset / expandedHeight) <= 0.8224758209391703

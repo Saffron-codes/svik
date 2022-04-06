@@ -1,14 +1,12 @@
 package com.example.chatapp
 
 
-import android.os.Environment
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import android.widget.Toast
 import io.flutter.plugins.GeneratedPluginRegistrant
-import java.io.File
 
 class MainActivity: FlutterActivity() {
 

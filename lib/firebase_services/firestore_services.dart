@@ -64,19 +64,28 @@ class FirestoreServices extends ChangeNotifier {
   addfriend(Friend friend) {
     added_friend(false);
     return _firestore
-        .collection("Friends")
-        .doc(_auth.currentUser!.uid)
-        .collection("Friends")
-        .doc(friend.uid)
-        .set({
-      "added@": friend.added,
-      "name": friend.name,
-      "photourl": friend.photourl,
-      "keywords": friend.keywords,
-      "lastmessage": "",
-      "lastmessagetime": Timestamp.now(),
-      "uid": friend.uid
+    .collection("activities")
+    .doc(_auth.currentUser!.uid)
+    .collection("sent")
+    .doc(friend.uid)
+    .set({
+      "friend_uid":friend.uid,
+      "time":Timestamp.now()
     });
+    // return _firestore
+    //     .collection("Friends")
+    //     .doc(_auth.currentUser!.uid)
+    //     .collection("Friends")
+    //     .doc(friend.uid)
+    //     .set({
+    //   "added@": friend.added,
+    //   "name": friend.name,
+    //   "photourl": friend.photourl,
+    //   "keywords": friend.keywords,
+    //   "lastmessage": "",
+    //   "lastmessagetime": Timestamp.now(),
+    //   "uid": friend.uid
+    // });
   }
 
   Stream<List<Message>>? getmessages(String id) {

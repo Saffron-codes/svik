@@ -9,7 +9,9 @@ import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/search_user.dart';
 import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/user_activity_model.dart';
 import 'package:chatapp/models/user_model.dart';
+import 'package:chatapp/providers/user_activity.dart';
 import 'package:chatapp/routes/camera_pages/camerapage.dart';
 import 'package:chatapp/routes/camera_pages/memories_page.dart';
 import 'package:chatapp/routes/firebase/wrapper.dart';
@@ -67,6 +69,9 @@ class App extends StatelessWidget {
         StreamProvider<List<Story>>.value(
           value: FirestoreServices().storylist,
           initialData: [],
+        ),
+        ChangeNotifierProvider<UserActivityProvider>(
+          create: (context) => UserActivityProvider(),
         ),
         ChangeNotifierProvider<BottomNavigationBarProvider>(
           create: (context) => BottomNavigationBarProvider(),

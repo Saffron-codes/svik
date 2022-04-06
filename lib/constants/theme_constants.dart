@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 final Color themeBlueColor = Color(0xff209EF1);
 final Color themeWhiteColor = Color(0xffD8D8D8);
 final Color chatPageBg = Color(0xff242232);
+final Color darkthemeBg = Color(0xff13141A);
 BottomNavigationBarThemeData bottomNavigationBarThemeData = BottomNavigationBarThemeData(
   unselectedItemColor: Color(0xffD8D8D8),
     selectedItemColor: Color(0xff209EF1),
@@ -28,4 +29,10 @@ AppBarTheme appBarTheme = AppBarTheme(
 
 TextStyle chatTextName = TextStyle(
   color: Color(0xffD8D8D8)
+);
+
+
+TextStyle chatTitle = TextStyle(
+  color: Color(0xffD8D8D8),
+  fontSize: 25
 );

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/models/search_user.dart';
 import 'package:chatapp/models/story.dart';
@@ -63,13 +64,13 @@ class _StoryListWidgetState extends State<StoryListWidget> {
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, "/view_story",
-                arguments: {"stories": _stories, "profiles": profiles});
+                arguments: {"stories": _stories, "profiles": profiles,"initialPageIndex":idx});
           },
           child: CircleAvatar(
             radius: 35,
-            backgroundImage: NetworkImage(profiles[idx]),
+            backgroundImage: CachedNetworkImageProvider(profiles[idx]),
           ),
-        );
+          );
       },
     );
   }

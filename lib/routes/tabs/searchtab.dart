@@ -1,10 +1,14 @@
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/models/user_activity_model.dart';
+import 'package:chatapp/providers/user_activity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/user_model.dart';
 
 class SearchTab extends StatefulWidget {
   const SearchTab({Key? key}) : super(key: key);
@@ -68,7 +72,10 @@ class _SearchListState extends State<SearchList> {
   Widget build(BuildContext context) {
     List<Friend> friendslist = Provider.of<List<Friend>>(context);
     final isfriendadded = Provider.of<FirestoreServices>(context);
+   final ActivityServices = Provider.of<UserActivityProvider>(context);
+    UserModel currentUser = Provider.of<UserModel>(context);
     List<SearchUser> output = widget.getdata;
+    
     int test = 0;
     //output.removeWhere((element) => friendslist.contains(element));
     return ListView.builder(
@@ -87,7 +94,7 @@ class _SearchListState extends State<SearchList> {
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () {
                 print(output[idx].uid);
-                FirestoreServices().addfriend(Friend(
+                Friend frd = Friend(
                     Timestamp.now(),
                     output[idx].name,
                     output[idx].photourl,
@@ -95,21 +102,23 @@ class _SearchListState extends State<SearchList> {
                     Timestamp.now(),
                     output[idx].keywords,
                     output[idx].uid
-                    ));
-                ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-                  content:  Text('Added ${output[idx].name} as Friend'),
-                  leading: const Icon(Icons.person),
-                  actions: [
-                    TextButton(
-                        onPressed: () {}, child: const Text('Chat Now')),
-                    TextButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context)
-                              .hideCurrentMaterialBanner();
-                        },
-                        child: const Text('Dismiss')),
-                  ],
-                ));
+                    );
+                //FirestoreServices().addfriend(frd);
+                ActivityServices.addActivity(output[idx].uid,currentUser);
+                // ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+                //   content:  Text('Added ${output[idx].name} as Friend'),
+                //   leading: const Icon(Icons.person),
+                //   actions: [
+                //     TextButton(
+                //         onPressed: () {}, child: const Text('Chat Now')),
+                //     TextButton(
+                //         onPressed: () {
+                //           ScaffoldMessenger.of(context)
+                //               .hideCurrentMaterialBanner();
+                //         },
+                //         child: const Text('Dismiss')),
+                //   ],
+                // ));
                 //isfriendadded.added_friend(false);
               },
               icon: Icon(Icons.person_add_alt),

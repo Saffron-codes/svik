@@ -127,25 +127,30 @@ class _EditUserLayoutState extends State<EditUserLayout> {
                       backgroundImage: NetworkImage(user.photourl!),
                     ),
                     Positioned(
-                      child: CircleAvatar(
-                          backgroundColor: Color(0xff141E29),
-                          radius: 12,
-                          child: uploadProfileService.isFileChosen?
-                          GestureDetector(
-                            onTap: () {
-                              uploadProfileService.removeImage();
-                            },
-                            child: Icon(
-                              Icons.close,
+                      child: GestureDetector(
+                        onTap: ()async{
+                          uploadProfileService.cropImage();
+                        },
+                        child: CircleAvatar(
+                            backgroundColor: Color(0xff141E29),
+                            radius: 12,
+                            child: uploadProfileService.isFileChosen?
+                            GestureDetector(
+                              onTap: () {
+                                uploadProfileService.removeImage();
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.grey,
+                                size: 15,
+                              ),
+                            ):Icon(
+                              Icons.camera_alt,
                               color: Colors.grey,
                               size: 15,
+                            )
                             ),
-                          ):Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey,
-                            size: 15,
-                          )
-                          ),
+                      ),
                       bottom: 0,
                       left: 55,
                     )

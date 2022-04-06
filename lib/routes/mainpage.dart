@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:chatapp/bottomnavbar_provider/bottomnavbarprovider.dart';
 import 'package:chatapp/connectivity_services/connectivity_enum.dart';
-import 'package:chatapp/connectivity_services/connectivity_services.dart';
 import 'package:chatapp/connectivity_services/show_error_snackbar.dart';
+import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/push_notification_Services/push_notification_services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -19,35 +21,70 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   final List<BottomNavigationBarItem> _tabs = [
     BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: "Home",),
+      tooltip: "",
+      icon: Icon(CupertinoIcons.home),
+      label: "Home",
+    ),
     BottomNavigationBarItem(
-        icon: Icon(Icons.chat),
-        label: "Chats",
-),
+      tooltip: "",
+      icon: Icon(CupertinoIcons.chat_bubble),
+      label: "Chats",
+    ),
     BottomNavigationBarItem(
-        icon: Icon(Icons.search_outlined), label: "Explore"),
+        tooltip: "", icon: Icon(CupertinoIcons.search), label: "Explore"),
     BottomNavigationBarItem(
-        icon: Icon(Icons.account_circle_outlined), label: "Profile"),
+      tooltip: "",
+      icon: Stack(
+        children: [
+          Icon(CupertinoIcons.bell),
+          Positioned(
+            right: 0,
+              child: Container(
+            padding: EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              color: themeBlueColor,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            constraints: BoxConstraints(minWidth: 12, minHeight: 12),
+            child: Text(
+              "1",
+              style: TextStyle(
+                color: themeWhiteColor,
+                fontSize: 8,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ))
+        ],
+      ),
+      label: "Activity",
+    ),
+    BottomNavigationBarItem(
+        tooltip: "",
+        icon: Icon(CupertinoIcons.profile_circled),
+        label: "Profile"),
   ];
   StreamSubscription? internetconnection;
   @override
   void initState() {
     super.initState();
     PushNotificationService().getdevicetoken();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Color(0xff141d26),
+    ));
   }
-  
 
   @override
   void check_connection() async {
-    try{
-    final result =  await InternetAddress.lookup("google.com");
-    if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
-      print("Connected");
+    try {
+      final result = await InternetAddress.lookup("google.com");
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print("Connected");
+      }
+    } on SocketException catch (_) {
+      print("Not Connected");
     }
-  }on SocketException catch(_){
-    print("Not Connected");
-  }
   }
 
   @override
@@ -59,22 +96,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
     // Future.delayed(Duration.zero,(){
     //   ConnectivityServices().showinterneterror(context, _connectivitystream);
     // });
-    return Consumer2<BottomNavigationBarProvider,ConnectivityStatus>(
-      builder: (context,navbarprovider,connection, child) {
-        if(connection == ConnectivityStatus.Offline){
-          Future.delayed(Duration.zero, () async {
-            ScaffoldMessenger.of(context).showSnackBar(Showerror());
-          });
-        }
-        else{
-          //ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          // Future.delayed(Duration.zero, () async {
-          //   ScaffoldMessenger.of(context).showSnackBar(show_back());
-          // });
-        }
-        return Scaffold(
+    return Consumer2<BottomNavigationBarProvider, ConnectivityStatus>(
+        builder: (context, navbarprovider, connection, child) {
+      if (connection == ConnectivityStatus.Offline) {
+        Future.delayed(Duration.zero, () async {
+          ScaffoldMessenger.of(context).showSnackBar(Showerror());
+        });
+      } else {
+        //ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        // Future.delayed(Duration.zero, () async {
+        //   ScaffoldMessenger.of(context).showSnackBar(show_back());
+        // });
+      }
+      return Scaffold(
+        // body: navbarprovider.currentscreen,
         body: navbarprovider.currentscreen,
         bottomNavigationBar: BottomNavigationBar(
+          // enableFeedback: false,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
           //selectedIconTheme: IconThemeData(size: 30),
@@ -84,8 +124,40 @@ class _BottomNavBarState extends State<BottomNavBar> {
             navbarprovider.currentIndex = idx;
           },
         ),
+        //  body: Stack(
+        //    children: [
+        //      navbarprovider.currentscreen,
+        //      Positioned(
+        //           left: 0,
+        //           right: 0,
+        //           bottom: 2,
+        //           child: BottomNavigationBar(
+        //             enableFeedback: false,
+        //             showSelectedLabels: false,
+        //             showUnselectedLabels: false,
+        //     type: BottomNavigationBarType.fixed,
+        //     landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+        //     //selectedIconTheme: IconThemeData(size: 30),
+        //     currentIndex: navbarprovider.getcurrentIndex,
+        //     items: _tabs,
+        //     onTap: (int idx) {
+        //       navbarprovider.currentIndex = idx;
+        //     },
+        //   ),
+        //         )
+        //    ],
+        //  ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //   type: BottomNavigationBarType.fixed,
+        //   landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+        //   //selectedIconTheme: IconThemeData(size: 30),
+        //   currentIndex: navbarprovider.getcurrentIndex,
+        //   items: _tabs,
+        //   onTap: (int idx) {
+        //     navbarprovider.currentIndex = idx;
+        //   },
+        // ),
       );
-      }
-    );
+    });
   }
 }

@@ -1,7 +1,10 @@
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
+import 'package:chatapp/providers/check_friend_provider.dart';
+import 'package:chatapp/providers/upload_profile_provider.dart';
 import 'package:chatapp/widgets/bottom_sheets/friends_list_sheet.dart';
+import 'package:chatapp/widgets/buttons/add_button.dart';
 import 'package:chatapp/widgets/dialogs/no_friend_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,10 +26,14 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     
   }
+
   @override
   Widget build(BuildContext context) {
     Friend friend = ModalRoute.of(context)!.settings.arguments as Friend;
-    
+   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xff13202D),
+    ));
+
     return StreamProvider<List<Friend>>(
       create: (context) => FirestoreServices().getFriends(friend.uid),
       initialData: [],
@@ -40,6 +47,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 floating: true,
                 delegate: CustomAppBar(expandedHeight: 170, friend: friend),
               ),
+              // SliverToBoxAdapter(
+              //   child: Container(
+              //     height: 30,
+              //     color: Colors.blue,
+              //   ),
+              // ),
               // SliverGrid(
               //   delegate: SliverChildBuilderDelegate((context, index) {
               //     return Container(
@@ -61,12 +74,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class CustomAppBar extends SliverPersistentHeaderDelegate{
+class CustomAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final Friend friend;
   CustomAppBar({required this.expandedHeight, required this.friend});
 
-  
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -90,7 +102,10 @@ class CustomAppBar extends SliverPersistentHeaderDelegate{
                 top: 3,
                 child: IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.arrow_back,color: Color(0xffD8D8D8),)),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Color(0xffD8D8D8),
+                    )),
               ),
               //the animated profile
               Positioned(
@@ -119,7 +134,11 @@ class CustomAppBar extends SliverPersistentHeaderDelegate{
                 top: (1 - shrinkOffset / expandedHeight) <= 0.8224758209391703
                     ? 10
                     : expandedHeight / 4.6 - shrinkOffset * 0.7,
-                left: friend.name.length <=14?friend.name.length<=5?165:145:110,
+                left: friend.name.length <= 14
+                    ? friend.name.length <= 5
+                        ? 165
+                        : 145
+                    : 110,
                 //right: MediaQuery.of(context).size.width / 4,
                 child: Opacity(
                   opacity:
@@ -127,8 +146,13 @@ class CustomAppBar extends SliverPersistentHeaderDelegate{
                           ? 1.0
                           : (1 - shrinkOffset / expandedHeight),
                   child: Text(
-                    friend.name.length>=20?"${friend.name.substring(0,15)}....":friend.name.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Color(0xffD8D8D8)),
+                    friend.name.length >= 20
+                        ? "${friend.name.substring(0, 15)}...."
+                        : friend.name.toString(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Color(0xffD8D8D8)),
                   ),
                 ),
               ),
@@ -139,16 +163,23 @@ class CustomAppBar extends SliverPersistentHeaderDelegate{
                 child: Opacity(
                   opacity: (1 - shrinkOffset / expandedHeight),
                   child: Consumer<List<Friend>>(
-                    builder:(context,value,child)=> InkWell(
+                    builder: (context, value, child) => InkWell(
                       onTap: () {
-                        value.length>0?showFriendsSheet(context, value):showNoFriendDialog(context);
+                        value.length > 0
+                            ? showFriendsSheet(context, value)
+                            : showNoFriendDialog(context);
                       },
                       child: Column(
                         children: [
                           Text("Friends",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15,color: Color(0xffD8D8D8))),
-                          Text(value.length.toString(),style: chatTextName,)
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: Color(0xffD8D8D8))),
+                          Text(
+                            value.length.toString(),
+                            style: chatTextName,
+                          )
                         ],
                       ),
                     ),
@@ -178,17 +209,36 @@ class CustomAppBar extends SliverPersistentHeaderDelegate{
               //Message button
               Positioned(
                   top: expandedHeight / 1.5 - shrinkOffset,
-                  right: 49,
+                  right: 15,
                   child: Opacity(
                     opacity: (1 - shrinkOffset / expandedHeight) <=
                             0.36265196774732344
                         ? 0.0
                         : (1 - shrinkOffset / expandedHeight),
                     child: IconButton(
-                      icon: Icon(Icons.chat_bubble_outline,color: Color(0xffD8D8D8),),
+                      icon: Icon(
+                        Icons.chat_bubble_outline,
+                        color: Color(0xffD8D8D8),
+                      ),
                       onPressed: () => null,
                     ),
                   )),
+              // Add friend button
+              FutureProvider<DataProgress?>.value(
+                  value: checkFriend().check(friend.uid),
+                  initialData: DataProgress.loading,
+                  builder: (context, snapshot) {
+                    return Positioned(
+                      top: expandedHeight / 1.5 - shrinkOffset,
+                      right: 75,
+                      child: Opacity(
+                        opacity: (1 - shrinkOffset / expandedHeight),
+                        child: addButton(
+                          isFriend: false,
+                        ),
+                      ),
+                    );
+                  })
             ],
           ),
         ),

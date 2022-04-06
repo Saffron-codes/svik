@@ -1,7 +1,7 @@
 DateTime dateTime =  DateTime.now();
 
-String convertToAgo(DateTime input) {
-    Duration difference = dateTime.difference(input);
+String convertToAgo(DateTime input,DateTime currentTime) {
+    Duration difference = currentTime.difference(input);
 
     if (difference.inDays>=31){
       return '${(difference.inDays/30).toInt()} mon ago';

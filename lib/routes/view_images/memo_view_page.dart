@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MemoView extends StatefulWidget {
   const MemoView({
@@ -24,6 +25,7 @@ class _MemoViewState extends State<MemoView> {
     int initpage = arguments["index"];
     //print(arguments["index"]);
     _pageController = PageController(initialPage: initpage);
+    //SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
     return PageView.builder(
       controller: _pageController,
       itemCount: images.length,
@@ -33,10 +35,18 @@ class _MemoViewState extends State<MemoView> {
         alignment: Alignment.topCenter,
         fit: StackFit.passthrough,
         children: [
-          Container(
+          // Container(
+          //   decoration: BoxDecoration(
+          //       image: DecorationImage(
+          //           image: FileImage(File(images[index].toString())), fit: BoxFit.cover)),
+          // ),
+          InteractiveViewer(
+            minScale: 0.5,
+            child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: FileImage(File(images[index].toString())), fit: BoxFit.cover)),
+          ),
           ),
           Positioned(
               top: 30,  
