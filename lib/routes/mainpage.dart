@@ -6,6 +6,7 @@ import 'package:chatapp/connectivity_services/connectivity_enum.dart';
 import 'package:chatapp/connectivity_services/show_error_snackbar.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/push_notification_Services/push_notification_services.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,46 +23,49 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<BottomNavigationBarItem> _tabs = [
     BottomNavigationBarItem(
       tooltip: "",
-      icon: Icon(CupertinoIcons.home),
+      icon: Icon(EvaIcons.home),
       label: "Home",
     ),
     BottomNavigationBarItem(
       tooltip: "",
-      icon: Icon(CupertinoIcons.chat_bubble),
+      icon: Icon(EvaIcons.messageCircle),
       label: "Chats",
     ),
     BottomNavigationBarItem(
-        tooltip: "", icon: Icon(CupertinoIcons.search), label: "Explore"),
+      tooltip: "",
+      icon: Icon(EvaIcons.searchOutline),
+      label: "Explore",
+    ),
     BottomNavigationBarItem(
       tooltip: "",
       icon: Stack(
         children: [
-          Icon(CupertinoIcons.bell),
+          Icon(EvaIcons.bell),
           Positioned(
-            right: 0,
+              right: 0,
               child: Container(
-            padding: EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              color: themeBlueColor,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            constraints: BoxConstraints(minWidth: 12, minHeight: 12),
-            child: Text(
-              "1",
-              style: TextStyle(
-                color: themeWhiteColor,
-                fontSize: 8,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ))
+                padding: EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                  color: themeBlueColor,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                constraints: BoxConstraints(minWidth: 12, minHeight: 12),
+                child: Text(
+                  "1",
+                  style: TextStyle(
+                    color: themeWhiteColor,
+                    fontSize: 8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ))
         ],
       ),
       label: "Activity",
     ),
     BottomNavigationBarItem(
         tooltip: "",
-        icon: Icon(CupertinoIcons.profile_circled),
+        icon: Icon(EvaIcons.person),
         label: "Profile"),
   ];
   StreamSubscription? internetconnection;
@@ -71,7 +75,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     PushNotificationService().getdevicetoken();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Color(0xff141d26),
+      systemNavigationBarColor: Color(0xff202225),
     ));
   }
 
@@ -113,6 +117,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         body: navbarprovider.currentscreen,
         bottomNavigationBar: BottomNavigationBar(
           // enableFeedback: false,
+          elevation: 40,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,

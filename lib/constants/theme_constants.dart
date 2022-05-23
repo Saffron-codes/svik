@@ -8,19 +8,20 @@ final Color themeWhiteColor = Color(0xffD8D8D8);
 final Color chatPageBg = Color(0xff242232);
 final Color darkthemeBg = Color(0xff13141A);
 BottomNavigationBarThemeData bottomNavigationBarThemeData = BottomNavigationBarThemeData(
-  unselectedItemColor: Color(0xffD8D8D8),
-    selectedItemColor: Color(0xff209EF1),
-    backgroundColor: Color(0xff141d26)
+  unselectedItemColor: Colors.grey[400],
+    selectedItemColor: Color(0xffFBFBFC),
+    backgroundColor: Color(0xff202225)
   );
 
 BottomSheetThemeData bottomSheetThemeData = BottomSheetThemeData(
-  backgroundColor: Color(0xff13141A),
+  backgroundColor: Color.fromARGB(255, 33, 34, 37),
+  elevation: 0
 );
 
 AppBarTheme appBarTheme = AppBarTheme(
   elevation: 0.0,
-  backgroundColor: Color(0xff141E29),
-  systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Color(0xff141E29)),
+  backgroundColor: Color(0xff202225),
+  systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Color(0xff202225)),
   actionsIconTheme: IconThemeData(
     color: Color(0xffD8D8D8)
   ),

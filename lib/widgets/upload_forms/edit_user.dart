@@ -18,10 +18,11 @@ Future editUserSheet(BuildContext context, UserModel currentUser) {
       context: context,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.96,
+          initialChildSize: 0.65,
           minChildSize: 0.5,
           maxChildSize: 0.96,
           expand: false,
+          //snap: true,
           builder: (context, scrollController) {
             //return EditUserLayout(user: currentUser,);
             return ChangeNotifierProvider<UploadProfile>(

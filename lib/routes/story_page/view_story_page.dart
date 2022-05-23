@@ -2,10 +2,11 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/constants/theme_constants.dart';
-import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/story_model.dart';
 import 'package:chatapp/utils/convert_to_ago.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ViewStory extends StatefulWidget {
   const ViewStory({Key? key}) : super(key: key);
@@ -15,6 +16,17 @@ class ViewStory extends StatefulWidget {
 }
 
 class _ViewStoryState extends State<ViewStory> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final arguements = ModalRoute.of(context)!.settings.arguments as Map;

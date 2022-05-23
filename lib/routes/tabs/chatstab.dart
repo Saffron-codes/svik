@@ -3,7 +3,9 @@ import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/routes/chatpage/userchat_list.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,15 +27,17 @@ class _ChatsTabState extends State<ChatsTab> {
       initialData: [],
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text("Chats"),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 15),
-              child: TouchableOpacity(child: Icon(Icons.add_comment_outlined), onTap: (){}),
+              child: TouchableOpacity(child: Icon(EvaIcons.personAdd), onTap: (){}),
             ),
+
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: TouchableOpacity(child: Icon(Icons.settings_outlined), onTap: (){}),
+              child: TouchableOpacity(child: Icon(EvaIcons.moreHorizontal), onTap: (){}),
             )
           ],
         ),

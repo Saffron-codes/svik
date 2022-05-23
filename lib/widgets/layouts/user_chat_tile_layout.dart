@@ -43,7 +43,7 @@ class _UserChatTileState extends State<UserChatTile> {
               ),
             ),
             Expanded(
-              child: InkWell(
+              child: TouchableOpacity(
                 onTap:widget.onTapChat,
                 child: Row(
                   children: [
@@ -69,16 +69,16 @@ class _UserChatTileState extends State<UserChatTile> {
                             widget.friend.lastmessage.contains("\n")?
                             Text(
                                 "${widget.friend.lastmessage.substring(0,5)}...",
-                                style: chatTextName,
+                                style: TextStyle(color: Colors.grey),
                               ):
                               Text(
                                 widget.friend.lastmessage,
-                                style: chatTextName,
+                                style: TextStyle(color: Colors.grey),
                               ):
 
                               Text(
                                 "${widget.friend.lastmessage.substring(0,23)}...",
-                                style: chatTextName,
+                                style: TextStyle(color: Colors.grey),
                               )
                       ],
                     ),

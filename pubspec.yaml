@@ -40,15 +40,17 @@ dependencies:
   firebase_messaging: ^10.0.9
   device_info: ^2.0.2
   flutter_colorpicker: ^1.0.2
-  camera: ^0.9.4+5
   path_provider: ^2.0.8
   http: ^0.13.4
   connectivity: ^3.0.6
   share: ^2.0.4
   file_picker: ^4.3.1
   swipeable_page_route: ^0.2.6
-  image_cropper: ^1.4.1
   cached_network_image: ^3.2.0
+  eva_icons_flutter: ^3.1.0
+  camera: ^0.9.5
+  image_cropper: ^2.0.2
+  percent_indicator: ^4.2.1
 
 dev_dependencies:
   flutter_test:

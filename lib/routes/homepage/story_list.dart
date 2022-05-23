@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/search_user.dart';
-import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/search_user_model.dart';
+import 'package:chatapp/models/story_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,24 +53,63 @@ class _StoryListWidgetState extends State<StoryListWidget> {
     //   print(story.name == friendlist[0].name);
     // });
     return ListView.separated(
+      physics: BouncingScrollPhysics(),
       padding: EdgeInsets.only(left: 5),
       shrinkWrap: true,
       separatorBuilder: (_, idx) => SizedBox(
-        width: 10,
+        width: 6,
       ),
       scrollDirection: Axis.horizontal,
       itemCount: _stories.length,
       itemBuilder: (_, idx) {
         return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, "/view_story",
-                arguments: {"stories": _stories, "profiles": profiles,"initialPageIndex":idx});
-          },
-          child: CircleAvatar(
-            radius: 35,
-            backgroundImage: CachedNetworkImageProvider(profiles[idx]),
-          ),
-          );
+            onTap: () {
+              Navigator.pushNamed(context, "/view_story", arguments: {
+                "stories": _stories,
+                "profiles": profiles,
+                "initialPageIndex": idx
+              });
+            },
+            child: SizedBox(
+              //color: Colors.blueGrey,
+              height: 120,
+              width: 66,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: profiles[idx],
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: imageProvider,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, str) => Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.grey[600]),
+                    ),
+                  ),
+                  _stories[idx].name.length < 9
+                      ? Text(
+                          _stories[idx].name,
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        )
+                      : Text(
+                          "${_stories[idx].name.substring(0, 7)}..",
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                ],
+              ),
+            ));
       },
     );
   }

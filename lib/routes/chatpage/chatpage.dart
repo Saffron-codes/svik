@@ -1,7 +1,7 @@
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/message.dart';
+import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/routes/chatpage/message_list.dart';
 import 'package:chatapp/user_profile_provider/banner_color.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
@@ -28,15 +28,12 @@ class _ChatPageState extends State<ChatPage> {
   late Future<bool> friend_load;
   @override
   void initState() {
-    friend_load =
-        FirestoreServices().checkbothfriends(widget.friend.uid, context);
+    friend_load = FirestoreServices().checkbothfriends(widget.friend.uid, context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.amber));
-
     //print(widget.chatroomid);
     final friend_provider = Provider.of<bannercolorprovider>(context);
 
@@ -45,10 +42,9 @@ class _ChatPageState extends State<ChatPage> {
         initialData: [],
         child: Scaffold(
             appBar: AppBar(
-              systemOverlayStyle:
-                  SystemUiOverlayStyle(statusBarColor: Color(0xff242232),systemNavigationBarColor: Color(0xff242232)),
-              elevation: 2,
-              backgroundColor: Color(0xff242232),
+              //systemOverlayStyle:SystemUiOverlayStyle(statusBarColor: Color(0xff242232),systemNavigationBarColor: Colors.black),
+              elevation: 1,
+              backgroundColor: Color.fromARGB(255, 48, 49, 54),
               automaticallyImplyLeading: false,
               flexibleSpace: SafeArea(
                 child: Container(
@@ -102,17 +98,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-            body: FutureBuilder<dynamic>(
-              future: friend_load,
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == false) {
-                    return Center(
-                      child: Text(
-                          "🤝waiting for ${widget.friend.name} to add you as friend🤝"),
-                    );
-                  }
-                  return Column(
+            body:Column(
                     children: [
                       Expanded(
                         child: MessageList(
@@ -138,26 +124,26 @@ class _ChatPageState extends State<ChatPage> {
                                     isDense: true,
                                     contentPadding: EdgeInsets.all(16),
                                     filled: true,
-                                    fillColor: Color(0xff242232),
+                                    fillColor: Color.fromARGB(255, 55, 54, 59),
                                     hintText: "Write message...",
                                     hintStyle:
                                         TextStyle(color: Color(0xffA3A0AC)),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(30.0),
                                       borderSide:
-                                          BorderSide(color: Color(0xff242232)),
+                                          BorderSide(color: Color(0xff202225)),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30.0)),
                                       borderSide:
-                                          BorderSide(color: Color(0xff242232)),
+                                          BorderSide(color: Color(0xff202225)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30.0)),
                                       borderSide:
-                                          BorderSide(color: Color(0xff242232)),
+                                          BorderSide(color: Color(0xff202225)),
                                     )),
                               ),
                             ),
@@ -263,24 +249,8 @@ class _ChatPageState extends State<ChatPage> {
                       //   ],
                       // ),
                     ],
-                  );
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xff0181FF),
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            )
-            // :Center(
-            //   child: Text("🤝waiting for ${widget.friend.name} to add you as friend🤝"),
-            // )
-            ));
+                  )
+        )
+    );
   }
 }

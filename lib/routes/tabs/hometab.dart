@@ -8,6 +8,7 @@ import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/routes/homepage/story_list.dart';
 import 'package:chatapp/widgets/upload_forms/choose_option_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class _HomeTabState extends State<HomeTab> {
             actions: [
               PopupMenuButton(
                 tooltip: "Add Something",
-                color: Color(0xff141E29),
+                color: Colors.grey[900],
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     textStyle: chatTextName,
@@ -52,7 +53,7 @@ class _HomeTabState extends State<HomeTab> {
                     value: "Memos",
                   )
                 ],
-                icon: Icon(Icons.add),
+                icon: Icon(EvaIcons.plus),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 onSelected: (value) {
@@ -63,71 +64,121 @@ class _HomeTabState extends State<HomeTab> {
             ],
           ),
           body: ListView(
+            physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
               SizedBox(
                 height: 2,
               ),
               Container(
-                  padding: EdgeInsets.only(left: 5, top: 10),
-                  height: 80,
+                  padding: EdgeInsets.only(left: 10, top: 10),
+                  height: 90,
                   child: ListView(
+                    physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            context: context,
-                            builder: (context) => Wrap(
+                          onTap: () {
+                            showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              context: context,
+                              builder: (context) => Wrap(
+                                children: [
+                                  ListTile(
+                                    iconColor: Color(0xffD8D8D8),
+                                    textColor: Color(0xffD8D8D8),
+                                    leading: Icon(EvaIcons.camera),
+                                    title: Text("Camera"),
+                                    onTap: () =>
+                                        Navigator.pushNamed(context, '/new_cam'),
+                                  ),
+                                  ListTile(
+                                    iconColor: Color(0xffD8D8D8),
+                                    textColor: Color(0xffD8D8D8),
+                                    leading: Icon(EvaIcons.image),
+                                    title: Text("Choose File"),
+                                    onTap: () {
+                                      storage_services.selectFile().then(
+                                          (value) => Navigator.pushNamed(
+                                              context, "/story_upload",
+                                              arguments:
+                                                  storage_services.file!.path));
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                            //Navigator.pushNamed(context, '/camera');
+                          },
+                          child: SizedBox(
+                            //color: Colors.blueGrey,
+                            height: 120,
+                            width: 66,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                ListTile(
-                                  iconColor: Color(0xffD8D8D8),
-                                  textColor: Color(0xffD8D8D8),
-                                  leading: Icon(Icons.camera_alt),
-                                  title: Text("Camera"),
-                                  onTap: () =>
-                                      Navigator.pushNamed(context, '/camera'),
+                                CachedNetworkImage(
+                                  imageUrl: currentUser.photourl.toString(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                ListTile(
-                                  iconColor: Color(0xffD8D8D8),
-                                  textColor: Color(0xffD8D8D8),
-                                  leading: Icon(Icons.image),
-                                  title: Text("Choose File"),
-                                  onTap: () {
-                                    storage_services.selectFile().then(
-                                        (value) => Navigator.pushNamed(
-                                            context, "/story_upload",
-                                            arguments:
-                                                storage_services.file!.path));
-                                  },
+                                Text(
+                                  "You",
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
                                 )
+
+                                // currentUser.name.toString().length<9?
+                                // Text(currentUser.name.toString(),style: TextStyle(fontSize: 12,color: Colors.grey),):
+                                // Text("${currentUser.name.toString().substring(0,7)}..",style: TextStyle(fontSize: 12,color: Colors.grey),),
                               ],
                             ),
-                          );
-                          //Navigator.pushNamed(context, '/camera');
-                        },
-                        child: Stack(children: [
-                          Positioned(
-                              child: currentUser != null
-                                  ? CircleAvatar(
-                                      radius: 35,
-                                      backgroundImage: CachedNetworkImageProvider(currentUser.photourl.toString()),
-                                    )
-                                  : CircleAvatar()),
-                          Positioned(
-                              top: 44,
-                              left: 46,
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: Colors.blue,
-                                child: Center(child: Icon(Icons.add)),
-                              ))
-                        ]),
-                      ),
+                          )),
+                      // child: CachedNetworkImage(
+                      //   imageUrl: currentUser.photourl.toString(),
+                      //   imageBuilder: (context, imageProvider) => Container(
+                      //     height: 60,
+                      //     width: 60,
+                      //     decoration: BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       image: DecorationImage(
+                      //         image: imageProvider,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      // child: Stack(children: [
+                      //   Positioned(
+                      //       child: currentUser != null
+                      //           ? CircleAvatar(
+                      //               radius: 30,
+                      //               backgroundImage: CachedNetworkImageProvider(currentUser.photourl.toString()),
+                      //             )
+                      //           : CircleAvatar()),
+                      //   Positioned(
+                      //       top: 44,
+                      //       left: 46,
+                      //       child: CircleAvatar(
+                      //         radius: 10,
+                      //         backgroundColor: Colors.blue,
+                      //         child: Center(child: Icon(Icons.add)),
+                      //       ))
+                      // ]),
                       StoryListWidget()
                     ],
                   )),

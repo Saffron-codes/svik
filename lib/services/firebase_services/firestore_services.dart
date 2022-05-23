@@ -1,8 +1,8 @@
 import 'package:chatapp/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/message.dart';
-import 'package:chatapp/models/search_user.dart';
-import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/message_model.dart';
+import 'package:chatapp/models/search_user_model.dart';
+import 'package:chatapp/models/story_model.dart';
 import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/user_profile_provider/banner_color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

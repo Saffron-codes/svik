@@ -1,5 +1,5 @@
 import 'package:chatapp/constants/theme_constants.dart';
-import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/models/search_user_model.dart';
 import 'package:chatapp/models/user_activity_model.dart';
 import 'package:chatapp/utils/convert_to_ago.dart';
 import 'package:chatapp/widgets/layouts/user_activity_tile_layout.dart';
@@ -46,8 +46,8 @@ class _ActivityTabPageState extends State<ActivityTabPage> {
                       ),
                       DropdownButton(
                         value: dropdownvalue,
-                        style: TextStyle(color: themeWhiteColor),
-                        dropdownColor: Color.fromARGB(255, 51, 60, 66),
+                        style: TextStyle(color: Colors.amber),
+                        dropdownColor: Color.fromARGB(255, 2, 109, 180),
                         elevation: 2,
                         borderRadius: BorderRadius.circular(10),
                         underline: Container(),

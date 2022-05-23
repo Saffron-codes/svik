@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/story_model.dart';
 import 'package:chatapp/story_provider/story_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

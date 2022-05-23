@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/models/user_model.dart';
@@ -82,7 +83,9 @@ class _EditUserLayoutState extends State<EditUserLayout> {
               ):
               TouchableOpacity(
                 onTap: () {
-                  _nameController.text != user.name ?uploadProfileService.changeName(_nameController.text):null;
+                  FocusScope.of(context).unfocus();
+                  String newName = _nameController.text;
+                  newName != user.name ?uploadProfileService.changeName(newName):null;
                    uploadProfileService.loadUserData(context);
                 },
                 child: Icon(
@@ -118,14 +121,35 @@ class _EditUserLayoutState extends State<EditUserLayout> {
                 child: Stack(
                   children: [
                     uploadProfileService.isFileChosen?
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage:FileImage(File(uploadProfileService.chosenImagePath!)),
-                    ):
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(user.photourl!),
+                    // CircleAvatar(
+                    //   radius: 40,
+                    //   backgroundImage:FileImage(File(uploadProfileService.chosenImagePath!)),
+                    // ):
+                    Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: FileImage(File(uploadProfileService.chosenImagePath!)),
+                      ),
                     ),
+                  ):
+                    CachedNetworkImage(
+                  imageUrl: user.photourl.toString(),
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: imageProvider,
+                      ),
+                    ),
+                  ),
+                ),
                     Positioned(
                       child: GestureDetector(
                         onTap: ()async{
@@ -133,7 +157,7 @@ class _EditUserLayoutState extends State<EditUserLayout> {
                         },
                         child: CircleAvatar(
                             backgroundColor: Color(0xff141E29),
-                            radius: 12,
+                            radius: 10,
                             child: uploadProfileService.isFileChosen?
                             GestureDetector(
                               onTap: () {
@@ -142,17 +166,17 @@ class _EditUserLayoutState extends State<EditUserLayout> {
                               child: Icon(
                                 Icons.close,
                                 color: Colors.grey,
-                                size: 15,
+                                size: 12,
                               ),
                             ):Icon(
                               Icons.camera_alt,
                               color: Colors.grey,
-                              size: 15,
+                              size: 12,
                             )
                             ),
                       ),
                       bottom: 0,
-                      left: 55,
+                      right: 0.5,
                     )
                   ],
                 ),

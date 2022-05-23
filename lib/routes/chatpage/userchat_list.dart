@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/utils/chatroom_id.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/models/search_user_model.dart';
 import 'package:chatapp/routes/chatpage/chatpage.dart';
 import 'package:chatapp/widgets/layouts/user_chat_tile_layout.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:swipeable_page_route/swipeable_page_route.dart';
 
 import '../../utils/convert_to_ago.dart';
+import '../../widgets/layouts/new_chat_tile_layout.dart';
 
 class UserChatList extends StatefulWidget {
   const UserChatList({Key? key}) : super(key: key);
@@ -61,75 +62,73 @@ class _UserChatListState extends State<UserChatList> {
         .sort((a, b) => b.lastmessagetime.compareTo(a.lastmessagetime));
     List<Friend> output =
         _myfriendList.where((item) => item.keywords.contains(search)).toList();
-    return RefreshIndicator(
-      color: Color(0xff209EF1),
-      backgroundColor: Color(0xff242232),
-      onRefresh: refresh,
-      child: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          // shrinkWrap: true,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                height: 50,
-                child: CupertinoSearchTextField(
-                  backgroundColor: Color(0xff202A44),
-                  // itemColor: Color.fromARGB(255, 235, 228, 228),
-                  itemColor: Color(0xffA3A0AC),
-                  // focusNode: search_node,
-                  onChanged: (val) {
-                    setState(() {
-                      search = val;
-                    });
-                  },
-                  style: TextStyle(color: Color(0xffA3A0AC)),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  controller: _searchController,
-                ),
-              ),
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SizedBox(
+            height: 50,
+            child: CupertinoSearchTextField(
+              backgroundColor: Color(0xff303136),
+              // itemColor: Color.fromARGB(255, 235, 228, 228),
+              itemColor: Color(0xffA3A0AC),
+              // focusNode: search_node,
+              onChanged: (val) {
+                setState(() {
+                  search = val;
+                });
+              },
+              style: TextStyle(color: Color(0xffA3A0AC)),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              controller: _searchController,
             ),
-            search != ""
-                ? ListView.builder(
-                    physics: BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    shrinkWrap: true,
-                    itemCount: output.length,
-                    itemBuilder: (_, idx) {
-                      return UserChatTile(
-                        friend: output[idx],
-                        onTapChat: () {
-                          Navigator.push(
-                            context,
-                            SwipeablePageRoute(
-                              builder: (_) => ChatPage(
-                                chatroomid: chatRoomId(
-                                    _auth.currentUser!.uid.toString(),
-                                    output[idx].uid),
-                                friend: Friend(
-                                    output[idx].added,
-                                    output[idx].name,
-                                    output[idx].photourl,
-                                    output[idx].lastmessage,
-                                    output[idx].lastmessagetime,
-                                    [],
-                                    output[idx].uid),
-                              ),
-                            ),
-                          );
-                        },
-                        currentTime: dateTime,
+          ),
+        ),
+                search != ""
+            ? ListView.builder(
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                shrinkWrap: true,
+                itemCount: output.length,
+                itemBuilder: (_, idx) {
+                  return UserChatTile(
+                    friend: output[idx],
+                    onTapChat: () {
+                      Navigator.push(
+                        context,
+                        SwipeablePageRoute(
+                          builder: (_) => ChatPage(
+                            chatroomid: chatRoomId(
+                                _auth.currentUser!.uid.toString(),
+                                output[idx].uid),
+                            friend: Friend(
+                                output[idx].added,
+                                output[idx].name,
+                                output[idx].photourl,
+                                output[idx].lastmessage,
+                                output[idx].lastmessagetime,
+                                [],
+                                output[idx].uid),
+                          ),
+                        ),
                       );
                     },
-                  )
-                : ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
+                    currentTime: dateTime,
+                  );
+                },
+              )
+            : Expanded(
+              child: RefreshIndicator(
+                  color: Colors.grey[400],
+                  backgroundColor: Color(0xff303136),
+                  onRefresh: refresh,
+                  child: ListView.builder(
+                    physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    //shrinkWrap: true,
                     itemCount: _myfriendList.length,
                     itemBuilder: (_, idx) {
-                      return UserChatTile(
+                      return ChatBox(
                         friend: _myfriendList[idx],
                         onTapChat: () {
                           Navigator.push(
@@ -154,9 +153,107 @@ class _UserChatListState extends State<UserChatList> {
                         currentTime: dateTime,
                       );
                     },
-                  )
-          ]),
+                  ),
+                ),
+            )
+      ],
     );
+    // return ListView(
+    //   //physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+    //   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    //   // shrinkWrap: true,
+    //   children: [
+    //     Padding(
+    //       padding: const EdgeInsets.all(12.0),
+    //       child: SizedBox(
+    //         height: 50,
+    //         child: CupertinoSearchTextField(
+    //           backgroundColor: Color(0xff303136),
+    //           // itemColor: Color.fromARGB(255, 235, 228, 228),
+    //           itemColor: Color(0xffA3A0AC),
+    //           // focusNode: search_node,
+    //           onChanged: (val) {
+    //             setState(() {
+    //               search = val;
+    //             });
+    //           },
+    //           style: TextStyle(color: Color(0xffA3A0AC)),
+    //           borderRadius: BorderRadius.all(Radius.circular(15)),
+    //           controller: _searchController,
+    //         ),
+    //       ),
+    //     ),
+    //     search != ""
+    //         ? ListView.builder(
+    //             physics: BouncingScrollPhysics(
+    //                 parent: AlwaysScrollableScrollPhysics()),
+    //             shrinkWrap: true,
+    //             itemCount: output.length,
+    //             itemBuilder: (_, idx) {
+    //               return UserChatTile(
+    //                 friend: output[idx],
+    //                 onTapChat: () {
+    //                   Navigator.push(
+    //                     context,
+    //                     SwipeablePageRoute(
+    //                       builder: (_) => ChatPage(
+    //                         chatroomid: chatRoomId(
+    //                             _auth.currentUser!.uid.toString(),
+    //                             output[idx].uid),
+    //                         friend: Friend(
+    //                             output[idx].added,
+    //                             output[idx].name,
+    //                             output[idx].photourl,
+    //                             output[idx].lastmessage,
+    //                             output[idx].lastmessagetime,
+    //                             [],
+    //                             output[idx].uid),
+    //                       ),
+    //                     ),
+    //                   );
+    //                 },
+    //                 currentTime: dateTime,
+    //               );
+    //             },
+    //           )
+    //         : RefreshIndicator(
+    //             color: Colors.grey[400],
+    //             backgroundColor: Color(0xff303136),
+    //             onRefresh: refresh,
+    //             child: ListView.builder(
+    //               physics: BouncingScrollPhysics(),
+    //               shrinkWrap: true,
+    //               itemCount: _myfriendList.length,
+    //               itemBuilder: (_, idx) {
+    //                 return ChatBox(
+    //                   friend: _myfriendList[idx],
+    //                   onTapChat: () {
+    //                     Navigator.push(
+    //                       context,
+    //                       SwipeablePageRoute(
+    //                         builder: (_) => ChatPage(
+    //                           chatroomid: chatRoomId(
+    //                               _auth.currentUser!.uid.toString(),
+    //                               _myfriendList[idx].uid),
+    //                           friend: Friend(
+    //                               _myfriendList[idx].added,
+    //                               _myfriendList[idx].name,
+    //                               _myfriendList[idx].photourl,
+    //                               _myfriendList[idx].lastmessage,
+    //                               _myfriendList[idx].lastmessagetime,
+    //                               [],
+    //                               _myfriendList[idx].uid),
+    //                         ),
+    //                       ),
+    //                     );
+    //                   },
+    //                   currentTime: dateTime,
+    //                 );
+    //               },
+    //             ),
+    //           )
+    //   ],
+    // );
   }
 
   Future<void> refresh() async {

@@ -25,7 +25,7 @@ class UploadProfile extends ChangeNotifier {
   DataProgress userDataProgress = DataProgress.none;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  File? croppedFile;
+  CroppedFile? croppedFile;
   static const platform = MethodChannel('com.javesindia/channels');
   UploadTask? uploadTask;
   //Choose Image for profile
@@ -37,29 +37,26 @@ class UploadProfile extends ChangeNotifier {
     if (result != null) {
       isFileChosen = true;
       userDataProgress = DataProgress.none;
-      croppedFile = await ImageCropper.cropImage(
-        sourcePath: chosenImagePath.toString(),
-        aspectRatioPresets: [
-          CropAspectRatioPreset.original
-        ],
-        cropStyle: CropStyle.circle,
-        compressQuality: 70,
-        androidUiSettings: AndroidUiSettings(
-          toolbarTitle: "Crop Profile",
-          toolbarColor: chatPageBg,
-          toolbarWidgetColor: themeBlueColor,
-          hideBottomControls: true,
-          showCropGrid: false,
-          //initAspectRatio: CropAspectRatioPreset.ratio5x4
-        )
-      );
-      if(croppedFile !=null){
+      croppedFile = await ImageCropper().cropImage(
+          sourcePath: chosenImagePath.toString(),
+          aspectRatioPresets: [CropAspectRatioPreset.ratio4x3],
+          cropStyle: CropStyle.rectangle,
+          compressQuality: 70,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: "Crop Profile",
+              toolbarColor: chatPageBg,
+              toolbarWidgetColor: themeBlueColor,
+              hideBottomControls: true,
+              showCropGrid: false,
+              //initAspectRatio: CropAspectRatioPreset.ratio5x4
+            )
+          ]);
+      if (croppedFile != null) {
         chosenImagePath = croppedFile!.path;
         print("Cropped");
         notifyListeners();
-      }else{
-
-      }
+      } else {}
       notifyListeners();
       return true;
     }
@@ -80,24 +77,19 @@ class UploadProfile extends ChangeNotifier {
     userName = name;
     notifyListeners();
   }
-  
-  //crop a choosen image again
-  void cropImage()async{
-    croppedFile = await ImageCropper.cropImage(
-        sourcePath: chosenImagePath.toString(),
-        aspectRatioPresets: [
-          CropAspectRatioPreset.original
-        ],
-        cropStyle: CropStyle.circle,
-        compressQuality: 70
-      );
-      if(croppedFile !=null){
-        chosenImagePath = croppedFile!.path;
-        print("Cropped");
-        notifyListeners();
-      }else{
 
-      }
+  //crop a choosen image again
+  void cropImage() async {
+    croppedFile = await ImageCropper().cropImage(
+        sourcePath: chosenImagePath.toString(),
+        aspectRatioPresets: [CropAspectRatioPreset.original],
+        cropStyle: CropStyle.circle,
+        compressQuality: 70);
+    if (croppedFile != null) {
+      chosenImagePath = croppedFile!.path;
+      print("Cropped");
+      notifyListeners();
+    } else {}
   }
 
   // Future loadUserData() async {
@@ -112,7 +104,7 @@ class UploadProfile extends ChangeNotifier {
   //   //   notifyListeners();
   //   // });
   // }
-   showToast(){
+  showToast() {
     platform.invokeMethod("toast", {"data": "An Error Occured"});
   }
 
@@ -120,11 +112,13 @@ class UploadProfile extends ChangeNotifier {
     if (userName.isNotEmpty) {
       userDataProgress = DataProgress.loading;
       notifyListeners();
-      await _auth.currentUser!.updateDisplayName(userName).whenComplete(()async {
+      await _auth.currentUser!
+          .updateDisplayName(userName)
+          .whenComplete(() async {
         await _firestore
-          .collection("users")
-          .doc(_auth.currentUser!.uid)
-          .update({"name": userName});
+            .collection("users")
+            .doc(_auth.currentUser!.uid)
+            .update({"name": userName});
         userDataProgress = DataProgress.done;
         userName = "";
         notifyListeners();
@@ -140,41 +134,38 @@ class UploadProfile extends ChangeNotifier {
       notifyListeners();
       final destination = "Profiles/${_auth.currentUser!.uid}";
       final ref = FirebaseStorage.instance.ref(destination);
-      try{
-        final result = await InternetAddress.lookup("www.google.com")
-        .timeout(
-          Duration(seconds:3),
-          onTimeout: ()=>showToast(),
+      try {
+        final result = await InternetAddress.lookup("www.google.com").timeout(
+          Duration(seconds: 3),
+          onTimeout: () => showToast(),
         );
-        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           uploadTask = ref.putFile(File(chosenImagePath!));
         }
-      }
-      on SocketException  catch(_){
+      } on SocketException catch (_) {
         userDataProgress = DataProgress.none;
         showToast();
         notifyListeners();
       }
-      if(uploadTask !=null){
+      if (uploadTask != null) {
         uploadTask!.whenComplete(() async {
-        userDataProgress = DataProgress.done;
-        isFileChosen = false;
-        final urlDownload = await ref.getDownloadURL();
-        _firestore
-            .collection("users")
-            .doc(_auth.currentUser!.uid)
-            .update({"photourl": urlDownload});
-        await _auth.currentUser!.updatePhotoURL(urlDownload);
-        await _auth.currentUser!.reload();
-        //update the user name
-        // userName.isNotEmpty?
-        // await _auth.currentUser!.updateDisplayName(userName):null;
+          userDataProgress = DataProgress.done;
+          isFileChosen = false;
+          final urlDownload = await ref.getDownloadURL();
+          _firestore
+              .collection("users")
+              .doc(_auth.currentUser!.uid)
+              .update({"photourl": urlDownload});
+          await _auth.currentUser!.updatePhotoURL(urlDownload);
+          await _auth.currentUser!.reload();
+          //update the user name
+          // userName.isNotEmpty?
+          // await _auth.currentUser!.updateDisplayName(userName):null;
 
-        notifyListeners();
-        Navigator.pop(ctx);
-      });
+          notifyListeners();
+          Navigator.pop(ctx);
+        });
       }
-      
     }
   }
 }

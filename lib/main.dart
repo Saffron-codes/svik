@@ -7,16 +7,17 @@ import 'package:chatapp/constants/theme/pallete.dart';
 import 'package:chatapp/constants/theme_constants.dart';
 import 'package:chatapp/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/firebase_services/firestore_services.dart';
-import 'package:chatapp/models/search_user.dart';
-import 'package:chatapp/models/story.dart';
+import 'package:chatapp/models/search_user_model.dart';
+import 'package:chatapp/models/story_model.dart';
 import 'package:chatapp/models/user_activity_model.dart';
 import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/providers/user_activity.dart';
 import 'package:chatapp/routes/camera_pages/camerapage.dart';
 import 'package:chatapp/routes/camera_pages/memories_page.dart';
+import 'package:chatapp/routes/camera_pages/new_camera_page.dart';
 import 'package:chatapp/routes/firebase/wrapper.dart';
+import 'package:chatapp/routes/profile_pages/new_profile_page.dart';
 import 'package:chatapp/routes/profile_pages/profile_page.dart';
-import 'package:chatapp/routes/storypages/view_story_page.dart';
 import 'package:chatapp/routes/tabs/chats_tab/chat_page.dart';
 import 'package:chatapp/routes/upload_routes/image_view.dart';
 import 'package:chatapp/routes/user_validation/loginpage.dart';
@@ -80,7 +81,8 @@ class App extends StatelessWidget {
           create: (context) => StoryProvider(),
         ),
         StreamProvider<ConnectivityStatus>.value(
-            value: ConnectivityService(context).connectionStatusController.stream,
+            value:
+                ConnectivityService(context).connectionStatusController.stream,
             initialData: ConnectivityStatus.unknown),
         StreamProvider(
           create: (context) => context.read<AuthService>().user,
@@ -95,26 +97,30 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        // showPerformanceOverlay: true,
         theme: ThemeData(
           //primaryColor: Color(0xff78909c),
-            primarySwatch: Palette.kToDark,
-            appBarTheme: appBarTheme,
-            bottomNavigationBarTheme: bottomNavigationBarThemeData,
-            bottomSheetTheme: bottomSheetThemeData,
-            scaffoldBackgroundColor: Color(0xff141E29)),
-        
+          primarySwatch: Palette.kToDark,
+          //appBarTheme: appBarTheme,
+          bottomNavigationBarTheme: bottomNavigationBarThemeData,
+          bottomSheetTheme: bottomSheetThemeData,
+          scaffoldBackgroundColor: Color(0xff202225),
+        ),
+
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => Wrapper(),
           '/login': (context) => LoginPage(),
           '/camera': (context) => CameraPage(cameras: cameras),
+          '/new_cam': (context) => CamPage2(cameras: cameras),
           '/memories': (context) => MemoriesPage(),
           '/story_upload': (context) => Story_Upload(),
           "/memo_view": (context) => MemoView(),
-          '/view_story': (context) => ViewStory(),
-          '/chatspage':(context)=>ChatsTabPage(),
-          '/profile':(context)=>ProfilePage()
+          //'/view_story': (context) => ViewStory(),
+          '/chatspage': (context) => ChatsTabPage(),
+          '/profile': (context) => ProfilePage(),
+          '/new_profile': (context) => NewProfilePage()
         },
       ),
     );
