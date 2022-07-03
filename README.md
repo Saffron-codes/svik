@@ -20,4 +20,6 @@ Add your suggestions and work with me  🛠️
     * Upload post/ask a question 
 
   ## ScreenShots 📸
-  <img src="ss/ss-1.jpg" width="400"/>
+    <img src="ss/ss-1.jpg" width="400"/>
+  ## Latest UI
+  <img src="ss/new.jpg" width="400"/>
