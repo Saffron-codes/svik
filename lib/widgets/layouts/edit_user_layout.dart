@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/constants/theme_constants.dart';
-import 'package:chatapp/firebase_services/firebasestorage_services.dart';
+import 'package:chatapp/config/theme/theme_constants.dart';
+import 'package:chatapp/services/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/providers/upload_profile_provider.dart';
+import 'package:chatapp/widgets/dialogs/choose_media_dialog.dart';
 import 'package:chatapp/widgets/upload_forms/choose_option_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,7 @@ class _EditUserLayoutState extends State<EditUserLayout> {
               Icon(
                 Icons.done,
                 size: 28,
-                color: themeWhiteColor,
+                color: ThemeConstants().themeWhiteColor,
               ):
               TouchableOpacity(
                 onTap: () {
@@ -91,14 +92,14 @@ class _EditUserLayoutState extends State<EditUserLayout> {
                 child: Icon(
                   Icons.done,
                   size: 28,
-                  color: themeBlueColor,
+                  color: ThemeConstants().themeBlueColor,
                 ),
               ):
               SizedBox(
                 height: 25,
                 width: 25,
                 child: CircularProgressIndicator(
-                  color: themeBlueColor,
+                  color: ThemeConstants().themeBlueColor,
                   strokeWidth: 2,
                 ),
               )
@@ -112,8 +113,8 @@ class _EditUserLayoutState extends State<EditUserLayout> {
             children: [
               GestureDetector(
                 onTap: ()async {
-                  //showOption(context);
-                  final bool ischosen = await uploadProfileService.chooseImage();
+                  chooseMedia(context,uploadProfileService.chooseImage);
+                  //final bool ischosen = await uploadProfileService.chooseImage();
                   // print(ischosen);
                   //print(uploadProfileService.chosenImagePath);
                   //storage_services.selectFile();

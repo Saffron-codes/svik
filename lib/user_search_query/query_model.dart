@@ -1,7 +1,7 @@
 
 
-import 'package:chatapp/firebase_services/firestore_services.dart';
-import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/services/firebase_services/firestore_services.dart';
+import 'package:chatapp/models/search_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';

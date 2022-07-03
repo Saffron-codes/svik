@@ -2,8 +2,7 @@
 
 import 'dart:async';
 
-import 'package:chatapp/connectivity_services/connectivity_enum.dart';
-import 'package:chatapp/connectivity_services/show_error_snackbar.dart';
+import 'package:chatapp/services/connectivity_services/connectivity_enum.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

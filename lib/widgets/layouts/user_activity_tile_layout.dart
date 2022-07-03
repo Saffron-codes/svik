@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/user_activity_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/theme_constants.dart';
+import '../../config/theme/theme_constants.dart';
 import '../../utils/convert_to_ago.dart';
 import '../touchable_opacity.dart';
 
@@ -35,7 +35,7 @@ class _UserActivityTileState extends State<UserActivityTile> {
               children: [
                 Text(
                   widget.profile["name"].toString(),
-                  style: TextStyle(color: themeWhiteColor, fontSize: 16),
+                  style: TextStyle(color: ThemeConstants().themeWhiteColor, fontSize: 16),
                 ),
                 Text(
                   convertToAgo(widget.activity.time.toDate(), DateTime.now()),
@@ -49,14 +49,14 @@ class _UserActivityTileState extends State<UserActivityTile> {
         Row(
           children: [
             TouchableOpacity(
-              child: Icon(Icons.done, color: themeBlueColor),
+              child: Icon(Icons.done, color: ThemeConstants().themeBlueColor),
               onTap: () {},
             ),
             SizedBox(
               width: 10,
             ),
             TouchableOpacity(
-              child: Icon(Icons.close, color: themeWhiteColor),
+              child: Icon(Icons.close, color: ThemeConstants().themeWhiteColor),
               onTap: () {},
             )
           ],

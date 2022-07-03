@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chatapp/constants/theme_constants.dart';
+import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -90,13 +90,13 @@ class FirebaseStorageServices extends ChangeNotifier {
               if (snapshot.hasData) {
                 final snap = snapshot.data;
                 final progress = snap!.bytesTransferred / snap.totalBytes;
-                return Text((progress * 100).toString(),style: chatTextName,);
+                return Text((progress * 100).toString(),style: ThemeConstants().chatTextName,);
               } else {
-                return Text("No task started",style: chatTextName,);
+                return Text("No task started",style: ThemeConstants().chatTextName,);
               }
             },
           )
-        : Text("No Task NULL",style: chatTextName,);
+        : Text("No Task NULL",style: ThemeConstants().chatTextName,);
   }
 
   Future<UploadTask?> upload_post() async {

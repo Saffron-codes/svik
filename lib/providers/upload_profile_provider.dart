@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chatapp/constants/theme_constants.dart';
+import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +29,7 @@ class UploadProfile extends ChangeNotifier {
   static const platform = MethodChannel('com.javesindia/channels');
   UploadTask? uploadTask;
   //Choose Image for profile
-  Future<bool> chooseImage() async {
+  void chooseImage() async {
     final result = await FilePicker.platform
         .pickFiles(type: FileType.image, allowMultiple: false);
     chosenImagePath = result?.files.single.path;
@@ -45,8 +45,8 @@ class UploadProfile extends ChangeNotifier {
           uiSettings: [
             AndroidUiSettings(
               toolbarTitle: "Crop Profile",
-              toolbarColor: chatPageBg,
-              toolbarWidgetColor: themeBlueColor,
+              toolbarColor: ThemeConstants().chatPageBg,
+              toolbarWidgetColor: ThemeConstants().themeBlueColor,
               hideBottomControls: true,
               showCropGrid: false,
               //initAspectRatio: CropAspectRatioPreset.ratio5x4
@@ -58,12 +58,75 @@ class UploadProfile extends ChangeNotifier {
         notifyListeners();
       } else {}
       notifyListeners();
-      return true;
     }
-    isFileChosen = false;
+    // isFileChosen = false;
     // chosenImagePath = "";
     notifyListeners();
-    return false;
+  }
+
+  void imageFromCamera(BuildContext ctx, String path) async {
+    isFileChosen = true;
+    userDataProgress = DataProgress.none;
+    chosenImagePath = path;
+    notifyListeners();
+    croppedFile = await ImageCropper().cropImage(
+        sourcePath: chosenImagePath.toString(),
+        aspectRatioPresets: [CropAspectRatioPreset.ratio4x3],
+        cropStyle: CropStyle.rectangle,
+        compressQuality: 70,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: "Crop Profile",
+            toolbarColor: ThemeConstants().chatPageBg,
+            toolbarWidgetColor: ThemeConstants().themeBlueColor,
+            hideBottomControls: true,
+            showCropGrid: false,
+            //initAspectRatio: CropAspectRatioPreset.ratio5x4
+          )
+        ]);
+    if (croppedFile != null) {
+      isFileChosen = true;
+      chosenImagePath = croppedFile!.path;
+      print("Cropped image from camera");
+      notifyListeners();
+      Navigator.pop(ctx);
+      Navigator.pop(ctx);
+    }
+    // isFileChosen = false;
+    // userDataProgress = DataProgress.none;
+    notifyListeners();
+  }
+
+  void imageFromHome(BuildContext context, String path) async {
+    isFileChosen = true;
+    userDataProgress = DataProgress.none;
+    chosenImagePath = path;
+    notifyListeners();
+    Navigator.pushNamed(context, '/view_image',arguments: path);
+    // croppedFile = await ImageCropper().cropImage(
+    //     sourcePath: chosenImagePath.toString(),
+    //     //aspectRatioPresets: [CropAspectRatioPreset.ratio4x3],
+    //     //cropStyle: CropStyle.rectangle,
+    //     compressQuality: 70,
+    //     uiSettings: [
+    //       AndroidUiSettings(
+    //         toolbarTitle: "Crop Profile",
+    //         toolbarColor: ThemeConstants().chatPageBg,
+    //         toolbarWidgetColor: ThemeConstants().themeBlueColor,
+    //         //hideBottomControls: true,
+    //         //showCropGrid: false,
+    //         //initAspectRatio: CropAspectRatioPreset.ratio5x4
+    //       )
+    //     ]);
+    // if (croppedFile != null) {
+    //   isFileChosen = true;
+    //   chosenImagePath = croppedFile!.path;
+    //   notifyListeners();
+    //   Navigator.pushNamed(context, '/view_image');
+    // }
+    // isFileChosen = false;
+    // userDataProgress = DataProgress.none;
+    notifyListeners();
   }
 
   //Remove Image
@@ -75,6 +138,13 @@ class UploadProfile extends ChangeNotifier {
   //Change Name State
   void changeName(String name) {
     userName = name;
+    chosenImagePath = "";
+    notifyListeners();
+  }
+
+  void changeImagePath(path) {
+    isFileChosen = true;
+    chosenImagePath = path;
     notifyListeners();
   }
 
@@ -164,6 +234,8 @@ class UploadProfile extends ChangeNotifier {
 
           notifyListeners();
           Navigator.pop(ctx);
+          userDataProgress = DataProgress.none;
+          notifyListeners();
         });
       }
     }

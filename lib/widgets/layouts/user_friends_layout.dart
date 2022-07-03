@@ -1,4 +1,4 @@
-import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/models/search_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

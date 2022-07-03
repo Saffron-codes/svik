@@ -1,4 +1,4 @@
-import 'package:chatapp/firebase_services/firebasestorage_services.dart';
+import 'package:chatapp/services/firebase_services/firebasestorage_services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

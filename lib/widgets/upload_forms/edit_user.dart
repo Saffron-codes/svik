@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:chatapp/firebase_services/firebasestorage_services.dart';
+import 'package:chatapp/services/firebase_services/firebasestorage_services.dart';
 import 'package:chatapp/models/user_model.dart';
 import 'package:chatapp/providers/upload_profile_provider.dart';
 import 'package:chatapp/widgets/layouts/edit_user_layout.dart';
@@ -25,10 +25,7 @@ Future editUserSheet(BuildContext context, UserModel currentUser) {
           //snap: true,
           builder: (context, scrollController) {
             //return EditUserLayout(user: currentUser,);
-            return ChangeNotifierProvider<UploadProfile>(
-              create: (context) => UploadProfile(),
-              child: EditUserLayout(user: currentUser),
-            );
+            return EditUserLayout(user: currentUser);
 
             //       // return Stack(
             //       //   alignment: Alignment.center,

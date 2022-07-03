@@ -1,4 +1,5 @@
-import 'package:chatapp/firebase_services/firebaseauth_services.dart';
+import 'package:chatapp/models/app_user.dart';
+import 'package:chatapp/services/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/models/friend_model.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/models/search_user_model.dart';
@@ -39,14 +40,31 @@ class FirestoreServices extends ChangeNotifier {
             .toList());
   }
 
+  Stream<List<AppUser>> getuserfriends() {
+    return _firestore
+        .collection("Friends")
+        .doc(_auth.currentUser!.uid)
+        .collection("Friends")
+        .snapshots()
+        .map(
+          (snaphots) => snaphots.docs
+              .map(
+                (doc) => AppUser.fromFirestore(
+                  doc.data(),
+                ),
+              )
+              .toList(),
+        );
+  }
+
   Stream<List<Story>> get storylist {
     return _firestore
         .collection("stories")
         .orderBy("time", descending: true)
         .snapshots()
         .map((event) => event.docs
-            .map((DocumentSnapshot ds) =>
-                Story(ds.get("url"), ds.get("time"), ds.get("name"),ds.get("uid")))
+            .map((DocumentSnapshot ds) => Story(
+                [ds.get("url")], ds.get("time"), ds.get("name"), ds.get("uid")))
             .toList());
   }
 
@@ -64,14 +82,11 @@ class FirestoreServices extends ChangeNotifier {
   addfriend(Friend friend) {
     added_friend(false);
     return _firestore
-    .collection("activities")
-    .doc(_auth.currentUser!.uid)
-    .collection("sent")
-    .doc(friend.uid)
-    .set({
-      "friend_uid":friend.uid,
-      "time":Timestamp.now()
-    });
+        .collection("activities")
+        .doc(_auth.currentUser!.uid)
+        .collection("sent")
+        .doc(friend.uid)
+        .set({"friend_uid": friend.uid, "time": Timestamp.now()});
     // return _firestore
     //     .collection("Friends")
     //     .doc(_auth.currentUser!.uid)
@@ -97,10 +112,38 @@ class FirestoreServices extends ChangeNotifier {
             .orderBy("time")
             .snapshots()
             .map((event) => event.docs
-                .map((DocumentSnapshot ds) => Message(ds.get("message"),
-                    ds.get("from"), ds.get("time"), ds.get("type"),ds.get("reactions"),ds.get("id")))
+                .map((DocumentSnapshot ds) => Message(
+                    ds.get("message"),
+                    ds.get("from"),
+                    ds.get("time"),
+                    ds.get("type"),
+                    ds.get("reactions"),
+                    ds.get("id")))
                 .toList())
         : null;
+  }
+
+  Stream<List<AppUser>> getFriendsList(String id) {
+    return _firestore
+        .collection("Friends")
+        .doc(id)
+        .collection("Friends")
+        .snapshots()
+        .map((event) => event.docs
+            .map(
+              (DocumentSnapshot ds) =>
+                  AppUser(ds.get("name"), ds.get("uid"), ds.get("photourl")),
+            )
+            .toList());
+  }
+
+  Stream<List<AppUser>>? getAppUsersList() {
+    return _firestore.collection("users").snapshots().map((event) => event.docs
+        .map(
+          (DocumentSnapshot ds) =>
+              AppUser(ds.get("name"), ds.get("uid"), ds.get("photourl")),
+        )
+        .toList());
   }
 
   sendmessage(Message message, String chatroomid, String receiverid) async {
@@ -114,11 +157,11 @@ class FirestoreServices extends ChangeNotifier {
       "message": message.message,
       "time": Timestamp.now(),
       "type": message.type,
-      "reactions":"",
-      "id":""
-    }).then((value){
+      "reactions": "",
+      "id": ""
+    }).then((value) {
       print(value.id);
-      value.update({"id":value.id});
+      value.update({"id": value.id});
     });
     await _firestore
         .collection("Friends")
@@ -158,16 +201,14 @@ class FirestoreServices extends ChangeNotifier {
     }
   }
 
-  Future<bool> addReactions(String chatroomid,String id,String emoji)async{
+  Future<bool> addReactions(String chatroomid, String id, String emoji) async {
     bool isdone = false;
     await _firestore
         .collection("chats")
         .doc(chatroomid)
         .collection("Chats")
         .doc(id)
-        .update({
-          "reactions":emoji
-        }).then((value) => isdone = true);
+        .update({"reactions": emoji}).then((value) => isdone = true);
     return isdone;
   }
 
@@ -191,7 +232,7 @@ class FirestoreServices extends ChangeNotifier {
   //   });
   // }
 
-  Stream<List<Friend>>  getFriends(String uid) {
+  Stream<List<Friend>> getFriends(String uid) {
     return _firestore
         .collection("Friends")
         .doc(uid)

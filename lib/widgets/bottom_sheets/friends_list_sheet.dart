@@ -1,6 +1,6 @@
-import 'package:chatapp/constants/theme_constants.dart';
+import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:chatapp/models/friend_model.dart';
-import 'package:chatapp/models/search_user.dart';
+import 'package:chatapp/models/search_user_model.dart';
 import 'package:chatapp/widgets/layouts/user_friends_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

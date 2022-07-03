@@ -1,4 +1,4 @@
-import 'package:chatapp/constants/theme_constants.dart';
+import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:chatapp/providers/upload_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class _addButtonState extends State<addButton> {
     print(friendLoad);
     if(friendLoad == DataProgress.done){
     return IconButton(
-      color: themeWhiteColor,
+      color: ThemeConstants().themeWhiteColor,
       onPressed: () {},
       icon: Icon(Icons.person_remove)
     );
@@ -26,18 +26,18 @@ class _addButtonState extends State<addButton> {
     else if(friendLoad == DataProgress.loading){
       return Icon(
        Icons.sync_outlined,
-       color: themeWhiteColor,
+       color: ThemeConstants().themeWhiteColor,
       );
     }
     else if(friendLoad == DataProgress.none){
       return Icon(
        Icons.person_add,
-       color: themeWhiteColor,
+       color: ThemeConstants().themeWhiteColor,
       );
     }
      return Icon(
        Icons.sync_outlined,
-       color: themeWhiteColor,
+       color: ThemeConstants().themeWhiteColor,
       );
   }
 }

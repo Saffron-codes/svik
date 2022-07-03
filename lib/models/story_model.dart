@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Story{
-  String url;
+  List<String> url;
   Timestamp time;
   String name;
   String uid;

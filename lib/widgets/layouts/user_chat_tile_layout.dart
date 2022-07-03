@@ -4,7 +4,7 @@ import 'package:chatapp/utils/convert_to_ago.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/theme_constants.dart';
+import '../../config/theme/theme_constants.dart';
 
 class UserChatTile extends StatefulWidget {
   final Friend friend;
@@ -62,7 +62,7 @@ class _UserChatTileState extends State<UserChatTile> {
                         widget.friend.lastmessage.isEmpty
                             ? Text(
                                 "Added ${convertToAgo(widget.friend.added.toDate(),widget.currentTime)}",
-                                style: chatTextName,
+                                style: ThemeConstants().chatTextName,
                               )
                             : 
                             widget.friend.lastmessage.length <=26?
@@ -86,7 +86,7 @@ class _UserChatTileState extends State<UserChatTile> {
                     widget.friend.lastmessagetime != null
                         ? Text(
                             convertToAgo(widget.friend.lastmessagetime.toDate(),widget.currentTime),
-                            style: chatTextName,
+                            style: ThemeConstants().chatTextName,
                           )
                         : Container(),
                     SizedBox(
