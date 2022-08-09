@@ -7,7 +7,7 @@ Future chooseMedia(BuildContext context,Function()? ontap2) {
     context: context,
     barrierColor: Colors.black12,
     builder: (context) => AlertDialog(
-      backgroundColor: Color.fromARGB(255, 33, 34, 37),
+      backgroundColor: Color(0xFF212225),
       contentPadding: EdgeInsets.zero,
       content: Wrap(
         children: [

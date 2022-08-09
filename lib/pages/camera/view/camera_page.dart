@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:chatapp/enums/camera_page_enum.dart';
+import 'package:chatapp/providers/edit_image_provider/edit_image_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -64,26 +65,56 @@ class _CameraPageState extends State<CameraPage>
   @override
   Widget build(BuildContext context) {
     final uploadProfileService = Provider.of<UploadProfile>(context,listen: true);
-    return Material(
-      child: Stack(
-        children: [
-          Container(
-            color: Colors.black,
-          ),
-          Listener(
-            onPointerDown: (_) => _pointers++,
-            onPointerUp: (_) => _pointers--,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-              child: CameraPreview(
-                controller,
-                child: LayoutBuilder(builder:
-                    (BuildContext context, BoxConstraints constraints) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onScaleStart: _handleScaleStart,
-                    onScaleUpdate: _handleScaleUpdate,
-                    onDoubleTap: () {
+    return Consumer<EditImageProvider>(
+      builder: (context,editProvider,child) {
+        return Material(
+          child: Stack(
+            children: [
+              Container(
+                color: Colors.black,
+              ),
+              Listener(
+                onPointerDown: (_) => _pointers++,
+                onPointerUp: (_) => _pointers--,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                  child: CameraPreview(
+                    controller,
+                    child: LayoutBuilder(builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onScaleStart: _handleScaleStart,
+                        onScaleUpdate: _handleScaleUpdate,
+                        onDoubleTap: () {
+                          if (camIndx == 0) {
+                            setState(() {
+                              camIndx = 1;
+                            });
+                          } else {
+                            setState(() {
+                              camIndx = 0;
+                            });
+                          }
+                          startCam(camIndx);
+                        },
+                        onTapDown: (TapDownDetails details) =>
+                            onViewFinderTap(details, constraints),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.all(Radius.circular(50))),
+                  child: GestureDetector(
+                    onTap: () {
                       if (camIndx == 0) {
                         setState(() {
                           camIndx = 1;
@@ -95,80 +126,55 @@ class _CameraPageState extends State<CameraPage>
                       }
                       startCam(camIndx);
                     },
-                    onTapDown: (TapDownDetails details) =>
-                        onViewFinderTap(details, constraints),
-                  );
-                }),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 4,
-            right: 4,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.grey[800],
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: GestureDetector(
-                onTap: () {
-                  if (camIndx == 0) {
-                    setState(() {
-                      camIndx = 1;
-                    });
-                  } else {
-                    setState(() {
-                      camIndx = 0;
-                    });
-                  }
-                  startCam(camIndx);
-                },
-                child: Icon(
-                  Icons.flip_camera_ios_rounded,
-                  color: Colors.white,
+                    child: Icon(
+                      Icons.flip_camera_ios_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            top: 4,
-            left: 4,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.grey[800],
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 50,
-            left: MediaQuery.of(context).size.width / 2.5,
-            child: GestureDetector(
-              onTap: () async {
-                XFile _pic = await controller.takePicture();
-                File _picture = File(_pic.path);
-                if (widget.pickmode == CameraPickMode.fromProfile) {
-                  uploadProfileService.imageFromCamera(context, _picture.path);
-                }else if(widget.pickmode == CameraPickMode.fromHome){
-                  uploadProfileService.imageFromHome(context, _picture.path);
-                }
-              },
-              child: CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: Colors.grey,
+              Positioned(
+                top: 4,
+                left: 4,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.all(Radius.circular(50))),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+              Positioned(
+                bottom: 50,
+                left: MediaQuery.of(context).size.width / 2.5,
+                child: GestureDetector(
+                  onTap: () async {
+                    XFile _pic = await controller.takePicture();
+                    File _picture = File(_pic.path);
+                    editProvider.setImagePath = _pic.path;
+                    if (widget.pickmode == CameraPickMode.fromProfile) {
+                      uploadProfileService.imageFromCamera(context, _picture.path);
+                    }else if(widget.pickmode == CameraPickMode.fromHome){
+                      uploadProfileService.imageFromHome(context, _picture.path);
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.grey,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      }
     );
   }
 

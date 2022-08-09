@@ -23,6 +23,7 @@ class AuthService {
 
   Stream<User?> get user=>_auth.authStateChanges();
 
+  String get uid=>_auth.currentUser!.uid;
 
   Future<String> _getBannerInfo(String? username) async {
     return _firestore
@@ -68,7 +69,12 @@ class AuthService {
   Future<User?> signupwithgoogle(BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     User? user;
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: "1070598894785-dpsp6u5ps98p7n7gi48sm5bh0faafig0.apps.googleusercontent.com",
+      scopes: [
+        "sc.SearchConsoleApi.webmastersReadonlyScope",
+      ]
+    );
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
     FirebaseFirestore _firestore = FirebaseFirestore.instance;

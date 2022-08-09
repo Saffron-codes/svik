@@ -133,8 +133,7 @@ class _StoryPageState extends State<StoryPage> {
     return GestureDetector(
       onTapDown: (details) => _onTapDown(details),
       child: Consumer<ThemeModel>(builder: (context, themeNotifier, child) {
-        return Stack(
-          children: [
+        return Stack(children: [
           Container(
             color: themeNotifier.isDark ? Colors.black : Colors.white,
           ),
@@ -161,8 +160,7 @@ class _StoryPageState extends State<StoryPage> {
                   ),
                   CircleAvatar(
                     radius: 20,
-                    backgroundImage:
-                        CachedNetworkImageProvider(widget.profile),
+                    backgroundImage: CachedNetworkImageProvider(widget.profile),
                   ),
                   SizedBox(
                     width: 10,
@@ -238,14 +236,17 @@ class _StoryViewState extends State<StoryView> {
         },
         child: Center(
             child: CachedNetworkImage(
+              fit: BoxFit.contain,
           imageUrl: widget.storyImage,
           progressIndicatorBuilder: (context, n, progress) {
             return Center(
-                child: Container(
-                    width: 80,
-                    child: LinearProgressIndicator(
-                      value: progress.progress,
-                    )));
+              child: SizedBox(
+                width: 80,
+                child: LinearProgressIndicator(
+                  value: progress.progress,
+                ),
+              ),
+            );
           },
         )),
       ),

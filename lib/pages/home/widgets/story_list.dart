@@ -53,7 +53,7 @@ class _StoryListWidgetState extends State<StoryListWidget> {
     //   print(story.name == friendlist[0].name);
     // });
     return ListView.separated(
-      physics: BouncingScrollPhysics(),
+      physics: ClampingScrollPhysics(),
       padding: EdgeInsets.only(left: 5),
       shrinkWrap: true,
       separatorBuilder: (_, idx) => SizedBox(

@@ -7,4 +7,11 @@ class UserActivity{
   String friend_uid;
   String category;
   UserActivity({required this.status,required this.time,required this.friend_uid,required this.category});
+
+
+    UserActivity.fromFirestore(Map<String, dynamic> firestoreMap)
+      : status = firestoreMap['status'],
+        time = firestoreMap['time'],
+        friend_uid = firestoreMap['friend_uid'],
+        category = firestoreMap['category'];
 }

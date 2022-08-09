@@ -2,8 +2,9 @@ import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:chatapp/models/search_user_model.dart';
 import 'package:chatapp/models/user_activity_model.dart';
 import 'package:chatapp/utils/convert_to_ago.dart';
-import 'package:chatapp/widgets/layouts/user_activity_tile_layout.dart';
+import 'package:chatapp/pages/activity/widgets/user_activity_tile.dart';
 import 'package:chatapp/widgets/touchable_opacity.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,54 +29,89 @@ class _ActivityTabPageState extends State<ActivityTabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<UserActivity>>.value(
+    return DefaultTabController(
+      length: 2,
+      child: StreamProvider<List<UserActivity>>.value(
         value: UserActivityProvider().getAllActivities(),
         initialData: [],
-        child: SafeArea(
-          child: Column(
-            // physics: BouncingScrollPhysics(),
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Activities",
-                        style: TextStyle(color: Colors.white, fontSize: 30),
-                      ),
-                      DropdownButton(
-                        value: dropdownvalue,
-                        style: TextStyle(color: Colors.amber),
-                        dropdownColor: Color.fromARGB(255, 2, 109, 180),
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(10),
-                        underline: Container(),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: items.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(
-                              items,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownvalue = newValue!;
-                          });
-                        },
-                      ),
-                    ],
-                  )),
-              Flexible(
-                  child: UserActivityList(
-                category: dropdownvalue.toLowerCase(),
-              ))
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text("Activities",style: TextStyle(fontWeight: FontWeight.bold,letterSpacing: 1),),
+            bottom: TabBar(
+              unselectedLabelStyle: TextStyle(color: Colors.grey),
+              indicatorWeight: 5.0,
+              tabs: const [
+                Tab(
+                  child: Text(
+                    "Received",
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    "Sent",
+                  ),
+                )
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: const [
+              UserActivityList(category: "received"),
+              UserActivityList(category: "sent"),
             ],
           ),
-        ));
+        ),
+      ),
+    );
+    // return StreamProvider<List<UserActivity>>.value(
+    //     value: UserActivityProvider().getAllActivities(),
+    //     initialData: [],
+    //     child: SafeArea(
+    //       child: Column(
+    //         // physics: BouncingScrollPhysics(),
+    //         children: [
+    //           Padding(
+    //               padding: EdgeInsets.all(8.0),
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 children: [
+    //                   Text(
+    //                     "Activities",
+    //                     style: TextStyle(color: Colors.white, fontSize: 30),
+    //                   ),
+    //                   DropdownButton(
+    //                     value: dropdownvalue,
+    //                     style: TextStyle(color: Colors.amber),
+    //                     dropdownColor: Color.fromARGB(255, 2, 109, 180),
+    //                     elevation: 2,
+    //                     borderRadius: BorderRadius.circular(10),
+    //                     underline: Container(),
+    //                     icon: const Icon(Icons.keyboard_arrow_down),
+    //                     items: items.map((String items) {
+    //                       return DropdownMenuItem(
+    //                         value: items,
+    //                         child: Text(
+    //                           items,
+    //                           style: TextStyle(color: Colors.black),
+    //                         ),
+    //                       );
+    //                     }).toList(),
+    //                     onChanged: (String? newValue) {
+    //                       setState(() {
+    //                         dropdownvalue = newValue!;
+    //                       });
+    //                     },
+    //                   ),
+    //                 ],
+    //               )),
+    //           Flexible(
+    //               child: UserActivityList(
+    //             category: dropdownvalue.toLowerCase(),
+    //           ))
+    //         ],
+    //       ),
+    //     ));
   }
 }
 
@@ -110,11 +146,19 @@ class _UserActivityListState extends State<UserActivityList> {
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             itemCount: _activities.length,
-            separatorBuilder: (ctx, idx) => SizedBox(
-              height: 10,
+            separatorBuilder: (ctx, idx) => Padding(
+              padding: const EdgeInsets.all(1),
+              child: Divider(
+                height: 10,
+                color: Color.fromARGB(255, 45, 48, 53),
+              ),
             ),
             itemBuilder: (ctx, idx) {
-              return UserActivityTile(profile: _profiles[idx], activity: _activities[idx]);
+              return UserActivityTile(
+                profile: _profiles[idx],
+                activity: _activities[idx],
+                isSent: _activities[idx].category == "sent" ? false : true,
+              );
             },
           )
         : Center(

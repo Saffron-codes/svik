@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:chatapp/models/app_user.dart';
+import 'package:chatapp/services/firebase_services/firebase_services.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,8 +78,6 @@ class _SearchUserTileState extends State<SearchUserTile> {
                       _load().then((value) {
                         setState(() {
                           _addState = AddState.added;
-                          _added = true;
-                          height = 150;
                         });
                       });
                     },
@@ -86,11 +85,6 @@ class _SearchUserTileState extends State<SearchUserTile> {
                 ],
               ),
             ),
-            _added?
-            Container(
-              height: 77,
-              color: Colors.blue,
-            ):Spacer()
             
           ],
         )
@@ -99,6 +93,6 @@ class _SearchUserTileState extends State<SearchUserTile> {
   }
 
   Future _load() async {
-    await Future.delayed(Duration(seconds: 3));
+   // await FirestoreServices().addfriend(widget.user);
   }
 }

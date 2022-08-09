@@ -3,6 +3,7 @@ import 'package:chatapp/models/search_user_model.dart';
 import 'package:chatapp/widgets/layouts/search_user_tile_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/friend_model.dart';
@@ -20,9 +21,11 @@ class _UserFriendsListState extends State<UserFriendsList> {
   @override
   Widget build(BuildContext context) {
     final _users = widget.users;
+
+
     final _userFrds = Provider.of<List<AppUser>>(context);
     final _commonFrds = _users.toSet().intersection(_userFrds.toSet()).toList();
-    return _users.isNotEmpty?
+    return _userFrds.isNotEmpty?
     ListView.separated(
       shrinkWrap: true,
       itemCount: _users.length,
@@ -43,7 +46,9 @@ class _UserFriendsListState extends State<UserFriendsList> {
       },
     ):
     Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        color: Colors.grey[600],
+      ),
     );
     //   return StreamBuilder<List<AppUser>>(
     //     stream: _users,

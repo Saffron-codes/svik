@@ -1,5 +1,6 @@
 
 import 'package:chatapp/config/pallete.dart';
+import 'package:chatapp/services/firebase_services/firebase_services.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final List<String> _settings = ['Account', 'Help', 'About', 'Theme'];
   bool _isOn = false;
+  final _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeModel>(
@@ -81,7 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                  CupertinoButton(
-                   onPressed: (){},
+                   onPressed: (){
+                     _authService.signOut().then((value) => Navigator.pop(context));
+                   },
                    child: Row(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: [

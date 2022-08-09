@@ -29,28 +29,36 @@
 
   <title>Svik</title>
   <link rel="manifest" href="manifest.json">
+  <script src="splash/splash.js"></script>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+  <link rel="stylesheet" type="text/css" href="splash/style.css">
+  <meta name="google-signin-client_id" content="1070598894785-8244s8fkb11ka1jrdij9idjg9b69qku4.apps.googleusercontent.com" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 </head>
 
 <body>
+  <picture id="splash">
+    <source
+      srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
+      media="(prefers-color-scheme: light)">
+    <source
+      srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
+      media="(prefers-color-scheme: dark)">
+    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="" />
+  </picture>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
-       <!-- <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-app.js"></script>
-       <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-auth.js"></script> -->
+
+
+
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
-    // const firebaseConfig = {
-    //   apiKey: "AIzaSyDyLQBWL57RK0KkxJib8VSviSWzA1OFXbc",
-    //   authDomain: "chatbro-818b8.firebaseapp.com",
-    //   projectId: "chatbro-818b8",
-    //   storageBucket: "chatbro-818b8.appspot.com",
-    //   messagingSenderId: "1070598894785",
-    //   appId: "1:1070598894785:web:56eed9e86e351b1a6a5040",
-    //   measurementId: "G-JNJEN37FD4"
-    // };
-
-    // firebase.initializeApp(firebaseConfig);
     function loadMainDartJs() {
       if (scriptLoaded) {
         return;
