@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/app_user.dart';
 import 'package:chatapp/models/friend_model.dart';
+import 'package:chatapp/services/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/services/firebase_services/firestore_services.dart';
 import 'package:chatapp/widgets/streams/user_friends_list.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -126,10 +128,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                       ],
                     ),
                     background: Hero(
-                        tag: "",
+                        tag: "profile",
                         child: GestureDetector(
-                          onTap: (){
-                            Navigator.pushNamed(context, '/profile_picture',arguments: _user.photourl);
+                          onTap: () {
+                            Navigator.pushNamed(context, '/profile_picture',
+                                arguments: _user.photourl);
                           },
                           child: CachedNetworkImage(
                             imageUrl: _user.photourl,
@@ -224,33 +227,61 @@ class _UserProfilePageState extends State<UserProfilePage>
                     child: Material(
                       child: Consumer(
                           builder: (context, ThemeModel themeNotifier, child) {
-                        return Container(
-                            color: themeNotifier.isDark
-                                ? ThemeConstants().darkBg
-                                : Colors.white30,
-                            child: TabBar(
-                              controller: _tabController,
-                              tabs: const [
-                                Tab(
-                                  child: Text(
-                                    'Posts',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                                Tab(
-                                  child: Text(
-                                    'Friends',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                                Tab(
-                                  child: Text(
-                                    'About',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                )
-                              ],
-                            ));
+                        return StreamProvider<List<AppUser>>.value(
+                            value: FirestoreServices().getFriendsList(_user.uid),
+                            initialData: [],
+                            builder: (context, _) {
+                              return Container(
+                                  color: themeNotifier.isDark
+                                      ? ThemeConstants().darkBg
+                                      : Colors.white30,
+                                  child: TabBar(
+                                    controller: _tabController,
+                                    unselectedLabelStyle:
+                                        TextStyle(color: Colors.grey),
+                                    indicatorWeight: 5.0,
+                                    tabs: [
+                                      Tab(
+                                        child: Text(
+                                          'Posts',
+                                        ),
+                                      ),
+                                      Tab(child: Consumer<List<AppUser>>(
+                                              builder: (context, friends, _) {
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Friends',
+                                            ),
+                                            SizedBox(
+                                              height: 26,
+                                              width: 42,
+                                              child: Card(
+                                                color: Color.fromARGB(
+                                                    255, 32, 158, 220),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child:
+                                                    Center(child: Text(friends.length.toString())),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      })
+                                          // icon: Icon(Icons.abc),
+                                          ),
+                                      Tab(
+                                        child: Text(
+                                          'About',
+                                        ),
+                                      )
+                                    ],
+                                  ));
+                            });
                       }),
                     ),
                   ),
@@ -269,21 +300,32 @@ class _UserProfilePageState extends State<UserProfilePage>
                     value: FirestoreServices().getAppUsersList(),
                     initialData: [],
                     // child: UserFriendsList(uid:_user.uid),
-                    builder: (context,child){
-                       final _users = Provider.of<List<AppUser>>(context);
+                    builder: (context, child) {
+                      final _users = Provider.of<List<AppUser>>(context);
                       return StreamProvider<List<AppUser>>.value(
                         value: FirestoreServices().getFriendsList(_user.uid),
                         initialData: [],
-                        builder: (context,child){
-                           final _friends = Provider.of<List<AppUser>>(context);
-                           final friends = _users.toSet().intersection(_friends.toSet()).toList();
-                          return StreamProvider<List<AppUser>>.value(
-                            value: FirestoreServices().getuserfriends(),
-                            initialData: [],
-                            builder: (context,child) {
-                              return UserFriendsList(users: friends);
+                        builder: (context, child) {
+                          final _friends = Provider.of<List<AppUser>>(context);
+                          //  final friends = _users.toSet().intersection(_friends.toSet()).toList();
+                          List<AppUser> friends = [];
+                          AuthService _auth = AuthService();
+                          for (var user in _users) {
+                            for (var friend in _friends) {
+                              if (friend.uid == user.uid) {
+                                friends.add(
+                                    AppUser(user.name, user.uid, user.profile));
+                                // Logger().i(friend);
+                              }
                             }
-                          );
+                          }
+                          return StreamProvider<List<AppUser>>.value(
+                              value: FirestoreServices().getuserfriends(),
+                              initialData: [],
+                              builder: (context, child) {
+                                // Logger().i(_users.length);
+                                return UserFriendsList(users: friends);
+                              });
                         },
                       );
                     },

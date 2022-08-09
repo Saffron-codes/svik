@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/config/theme/theme_constants.dart';
 import 'package:chatapp/models/user_model.dart';
+import 'package:chatapp/pages/profile/widgets/posts_grid_list/posts_list_grid.dart';
+import 'package:chatapp/providers/feed_provider/models/post.dart';
+import 'package:chatapp/services/firebase_services/feed_service/feed_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/theme_provider/theme_model.dart';
@@ -60,6 +64,23 @@ class _ProfilePageState extends State<ProfilePage>
             physics: BouncingScrollPhysics(),
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
+                // CupertinoSliverRefreshControl(
+                //   builder: (context, refreshState, pulledExtent, refreshTriggerPullDistance, refreshIndicatorExtent) {
+                //     Logger().i(refreshState.name);
+                //     return Center(
+                //       child: pulledExtent/100<1?
+                //       CircularProgressIndicator(
+                //         color: Colors.white30,
+                //         value: pulledExtent/100,
+                //         // value: refreshTriggerPullDistance,
+                //       ):CircularProgressIndicator(color: Colors.white30,),
+                //     );
+                //   },
+                //   onRefresh: () {
+                //     // this required Future<void> Function
+                //     return Future.value(true);
+                //   },
+                // ),
                 SliverAppBar(
                   systemOverlayStyle:
                       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
@@ -146,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ],
                     ),
                     background: Hero(
-                        tag: "",
+                        tag: "profile",
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(context, '/profile_picture',
@@ -251,23 +272,23 @@ class _ProfilePageState extends State<ProfilePage>
                                 : Colors.white30,
                             child: TabBar(
                               controller: _tabController,
+                              unselectedLabelStyle:
+                                  TextStyle(color: Colors.grey),
+                              indicatorWeight: 5.0,
                               tabs: const [
                                 Tab(
                                   child: Text(
                                     'Posts',
-                                    style: TextStyle(color: Colors.grey),
                                   ),
                                 ),
                                 Tab(
                                   child: Text(
                                     'Friends',
-                                    style: TextStyle(color: Colors.grey),
                                   ),
                                 ),
                                 Tab(
                                   child: Text(
                                     'About',
-                                    style: TextStyle(color: Colors.grey),
                                   ),
                                 )
                               ],
@@ -281,15 +302,12 @@ class _ProfilePageState extends State<ProfilePage>
             body: TabBarView(
               controller: _tabController,
               children: [
-                Center(
-                  child: Text("Posts"),
+                StreamProvider<List<Post>>.value(
+                  initialData: <Post>[],
+                  value: FeedService().getUserPosts(),
+                  child: PostsGridList(),
                 ),
-                ListView.builder(
-                  itemCount: 51,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text("Flutter-${index}"),
-                  ),
-                ),
+                Center(),
                 Center(
                   child: Text("About"),
                 ),

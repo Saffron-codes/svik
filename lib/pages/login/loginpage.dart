@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
             ElevatedButton.icon(
             onPressed: ()async {
-              await authService.signinwithgoogle(context);
+              await authService.signinwithgoogle(context).then((value) => Navigator.pop(context));
             },
             icon: Icon(Icons.account_circle_rounded),
             label: Text("Sign in with Google")),

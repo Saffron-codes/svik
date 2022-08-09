@@ -26,7 +26,6 @@ class _EditUserLayoutState extends State<EditUserLayout> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nameController.text = widget.user.name!;
     ProfieUrl = widget.user.photourl!;

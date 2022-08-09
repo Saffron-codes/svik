@@ -1,3 +1,4 @@
+import 'package:chatapp/config/toast/app_toast.dart';
 import 'package:chatapp/models/app_user.dart';
 import 'package:chatapp/services/firebase_services/firebaseauth_services.dart';
 import 'package:chatapp/models/friend_model.dart';
@@ -9,6 +10,7 @@ import 'package:chatapp/user_profile_provider/banner_color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
 
@@ -79,28 +81,36 @@ class FirestoreServices extends ChangeNotifier {
         .toList());
   }
 
-  addfriend(Friend friend) {
-    added_friend(false);
-    return _firestore
-        .collection("activities")
+  Future<void> addfriend(Friend newfriend) async {
+    await _firestore
+        .collection("Friends")
         .doc(_auth.currentUser!.uid)
-        .collection("sent")
-        .doc(friend.uid)
-        .set({"friend_uid": friend.uid, "time": Timestamp.now()});
-    // return _firestore
-    //     .collection("Friends")
-    //     .doc(_auth.currentUser!.uid)
-    //     .collection("Friends")
-    //     .doc(friend.uid)
-    //     .set({
-    //   "added@": friend.added,
-    //   "name": friend.name,
-    //   "photourl": friend.photourl,
-    //   "keywords": friend.keywords,
-    //   "lastmessage": "",
-    //   "lastmessagetime": Timestamp.now(),
-    //   "uid": friend.uid
-    // });
+        .collection("Friends")
+        .doc(newfriend.uid)
+        .set({
+      "added@": newfriend.added,
+      "name": newfriend.name,
+      "photourl": newfriend.photourl,
+      "keywords": newfriend.keywords,
+      "lastmessage": "",
+      "lastmessagetime": Timestamp.now(),
+      "uid": newfriend.uid
+    });
+
+    await _firestore
+        .collection("Friends")
+        .doc(newfriend.uid)
+        .collection("Friends")
+        .doc(_auth.currentUser!.uid)
+        .set({
+      "added@": newfriend.added,
+      "name": newfriend.name,
+      "photourl": newfriend.photourl,
+      "keywords": newfriend.keywords,
+      "lastmessage": "",
+      "lastmessagetime": Timestamp.now(),
+      "uid": _auth.currentUser!.uid
+    });
   }
 
   Stream<List<Message>>? getmessages(String id) {
@@ -210,6 +220,39 @@ class FirestoreServices extends ChangeNotifier {
         .doc(id)
         .update({"reactions": emoji}).then((value) => isdone = true);
     return isdone;
+  }
+
+  deleteMessage(
+      BuildContext context, String chatRoomId, String messageId) async {
+    try {
+      await _firestore
+          .collection("chats")
+          .doc(chatRoomId)
+          .collection("Chats")
+          .doc(messageId)
+          .delete()
+          .then((value) {
+        Navigator.pop(context);
+        ToastHelper().infoToast("Deleted message...");
+      });
+    } catch (e) {
+      Logger().i(e);
+    }
+  }
+
+  editMessage(BuildContext context, String chatRoomId, String messageId,
+      String newMessage) async {
+    try {
+      await _firestore
+          .collection("chats")
+          .doc(chatRoomId)
+          .collection("Chats")
+          .doc(messageId)
+          .update({"message": newMessage});
+      print("DoneEditing");
+    } catch (e) {
+      Logger().i(e);
+    }
   }
 
   // Future<List<Friend>> getFriends(String uid) {

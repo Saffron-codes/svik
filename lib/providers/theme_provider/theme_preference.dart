@@ -12,7 +12,7 @@ class ThemePreferences {
 
   getTheme() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(prefKey) ?? false;
+    return sharedPreferences.getBool(prefKey) ?? true;
   }
 }
 //Switching themes in the flutter apps - Flutterant

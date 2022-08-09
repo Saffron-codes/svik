@@ -28,7 +28,7 @@ class _ChatBoxState extends State<ChatBox> {
     return Consumer<ThemeModel>(
       builder: (context,themeNotifier, child) {
         return CupertinoButton(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.all(3.4),
           onPressed: widget.onTapChat,
           child: Container(
             height: 60,

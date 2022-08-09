@@ -102,7 +102,7 @@ class UploadProfile extends ChangeNotifier {
     userDataProgress = DataProgress.none;
     chosenImagePath = path;
     notifyListeners();
-    Navigator.pushNamed(context, '/view_image',arguments: path);
+    Navigator.pushNamed(context, '/view_image', arguments: path);
     // croppedFile = await ImageCropper().cropImage(
     //     sourcePath: chosenImagePath.toString(),
     //     //aspectRatioPresets: [CropAspectRatioPreset.ratio4x3],
@@ -179,6 +179,12 @@ class UploadProfile extends ChangeNotifier {
   }
 
   Future loadUserData(BuildContext ctx) async {
+    List<String> keywords = [];
+
+    for (int i = 1; i <= userName.length; i++) {
+      keywords.add(userName.substring(0, i));
+      keywords.add(userName.toLowerCase().substring(0, i));
+    }
     if (userName.isNotEmpty) {
       userDataProgress = DataProgress.loading;
       notifyListeners();
@@ -188,11 +194,13 @@ class UploadProfile extends ChangeNotifier {
         await _firestore
             .collection("users")
             .doc(_auth.currentUser!.uid)
-            .update({"name": userName});
+            .update({"name": userName,"keywords":keywords});
         userDataProgress = DataProgress.done;
         userName = "";
         notifyListeners();
         Navigator.pop(ctx);
+        userDataProgress = DataProgress.none;
+        notifyListeners();
       }).catchError((e, s) {
         userDataProgress = DataProgress.failed;
         notifyListeners();

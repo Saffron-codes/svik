@@ -1,6 +1,13 @@
 import 'package:chatapp/main.dart';
 import 'package:chatapp/pages/camera/view/camera_page.dart';
+import 'package:chatapp/pages/post/views/view_post_page.dart';
+import 'package:chatapp/pages/upload_post/view/upload_post_page.dart';
+import 'package:chatapp/providers/chat_page_provider/chat_page_provider.dart';
+import 'package:chatapp/providers/edit_image_provider/edit_image_provider.dart';
+import 'package:chatapp/providers/feed_provider/feed_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import 'config/theme/themes.dart';
@@ -34,6 +41,7 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     //final FirestoreServices firestoreServices = FirestoreServices();
     return MultiProvider(
       providers: [
@@ -51,7 +59,7 @@ class App extends StatelessWidget {
         ),
         StreamProvider<List<SearchUser>>.value(
           value: FirestoreServices().searchusers,
-          initialData:const [],
+          initialData: const [],
         ),
         // StreamProvider<List<Friend>>.value(
         //   value: FirestoreServices().friendslist,
@@ -88,50 +96,74 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ThemeModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ChatPageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => EditImageProvider(),
+        ),
+        ChangeNotifierProvider<FeedProvider>(
+          create: (context) => FeedProvider(),
+        ),
       ],
       child: Consumer<ThemeModel>(
-        builder: (context, ThemeModel themeNotifier, child) {
-          return MaterialApp(
-            // showPerformanceOverlay: true,
-            // darkTheme: ThemeData(
-            //   //primaryColor: Color(0xff78909c),
-            //   primarySwatch: Palette.kToDark,
-              
-            //   //appBarTheme: appBarTheme,
-            //   bottomNavigationBarTheme: ThemeConstants().bottomNavigationBarThemeData,
-            //   bottomSheetTheme: ThemeConstants().bottomSheetThemeData,
-            //   scaffoldBackgroundColor: Color(0xff202225),
-            // ),
-            // themeMode: ThemeMode.system,
-            theme: themeNotifier.isDark ? Themes().darkTheme : Themes().lightTheme,
+          builder: (context, ThemeModel themeNotifier, child) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+        return MaterialApp(
+          // showPerformanceOverlay: true,
+          // darkTheme: ThemeData(
+          //   //primaryColor: Color(0xff78909c),
+          //   primarySwatch: Palette.kToDark,
 
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => Wrapper(),
-              '/login': (context) => LoginPage(),
-              //'/camera': (context) => CameraPage(cameras: cameras),
-              '/new_cam': (context) => CameraPage(cameras: cameras,pickmode: ModalRoute.of(context)!.settings.arguments as CameraPickMode,),
-              '/memories': (context) => MemoriesPage(),
-              //'/story_upload': (context) => Story_Upload(),
-              //"/memo_view": (context) => MemoView(),
-              "/view_image": (context) => ValidateImagePage(imagePath: ModalRoute.of(context)!.settings.arguments as String,),
-              //'/view_story': (context) => ViewStory(),
-              '/story':(context)=>StoriesPage(routedata: ModalRoute.of(context)!.settings.arguments,),
-              '/profile': (context) => ProfilePage(),
-              '/user_profile':(context) => UserProfilePage(profileData:ModalRoute.of(context)!.settings.arguments as Friend),
-              '/new_profile': (context) => ProfilePage(),
-              '/settings':(context)=>SettingsPage(),
-              //view user profile
-              '/profile_picture':(context)=>ProfilePicturePage(src: ModalRoute.of(context)!.settings.arguments as String,)
-            },
-            onGenerateRoute: (route){
-              print(route.name);
-            },
-            
-          );
-        }
-      ),
+          //   //appBarTheme: appBarTheme,
+          //   bottomNavigationBarTheme: ThemeConstants().bottomNavigationBarThemeData,
+          //   bottomSheetTheme: ThemeConstants().bottomSheetThemeData,
+          //   scaffoldBackgroundColor: Color(0xff202225),
+          // ),
+          // themeMode: ThemeMode.system,
+          theme:
+              themeNotifier.isDark ? Themes().darkTheme : Themes().lightTheme,
+
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => Wrapper(),
+            '/login': (context) => LoginPage(),
+            //'/camera': (context) => CameraPage(cameras: cameras),
+            '/new_cam': (context) => CameraPage(
+                  cameras: cameras,
+                  pickmode: ModalRoute.of(context)!.settings.arguments
+                      as CameraPickMode,
+                ),
+            '/memories': (context) => MemoriesPage(),
+            //'/story_upload': (context) => Story_Upload(),
+            //"/memo_view": (context) => MemoView(),
+            "/view_image": (context) => ValidateImagePage(
+                  imagePath:
+                      ModalRoute.of(context)!.settings.arguments as String,
+                ),
+            //'/view_story': (context) => ViewStory(),
+            '/story': (context) => StoriesPage(
+                  routedata: ModalRoute.of(context)!.settings.arguments,
+                ),
+            '/profile': (context) => ProfilePage(),
+            '/user_profile': (context) => UserProfilePage(
+                profileData:
+                    ModalRoute.of(context)!.settings.arguments as Friend),
+            '/new_profile': (context) => ProfilePage(),
+            '/settings': (context) => SettingsPage(),
+            //view user profile
+            '/profile_picture': (context) => ProfilePicturePage(
+                  src: ModalRoute.of(context)!.settings.arguments as String,
+                ),
+            '/upload_post': (context) => UploadPostPage(),
+            '/post':(context) => ViewPostPage( postDetails:ModalRoute.of(context)!.settings.arguments as Map)
+          },
+        );
+      }),
     );
   }
 }
