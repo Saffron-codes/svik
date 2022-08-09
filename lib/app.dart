@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
+
 import 'package:chatapp/main.dart';
 import 'package:chatapp/pages/camera/view/camera_page.dart';
 import 'package:chatapp/pages/post/views/view_post_page.dart';
@@ -5,10 +10,6 @@ import 'package:chatapp/pages/upload_post/view/upload_post_page.dart';
 import 'package:chatapp/providers/chat_page_provider/chat_page_provider.dart';
 import 'package:chatapp/providers/edit_image_provider/edit_image_provider.dart';
 import 'package:chatapp/providers/feed_provider/feed_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:provider/provider.dart';
 
 import 'config/theme/themes.dart';
 import 'enums/camera_page_enum.dart';

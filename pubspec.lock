@@ -63,21 +63,21 @@ packages:
       name: camera
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0"
+    version: "0.10.0+1"
   camera_android:
     dependency: transitive
     description:
       name: camera_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0"
+    version: "0.10.0+1"
   camera_avfoundation:
     dependency: transitive
     description:
       name: camera_avfoundation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.8+2"
+    version: "0.9.8+3"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -414,7 +414,7 @@ packages:
       name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.0"
+    version: "5.4.1"
   google_sign_in_android:
     dependency: transitive
     description:
@@ -499,8 +499,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
-<<<<<<< HEAD
-=======
   lint:
     dependency: transitive
     description:
@@ -508,7 +506,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
->>>>>>> 79c2955028bc3e1793e32f5f1e4a3da447fa25d6
   lints:
     dependency: transitive
     description:
@@ -593,8 +590,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
-<<<<<<< HEAD
-=======
   path_drawing:
     dependency: transitive
     description:
@@ -609,7 +604,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
->>>>>>> 79c2955028bc3e1793e32f5f1e4a3da447fa25d6
   path_provider:
     dependency: "direct main"
     description:
@@ -658,7 +652,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   pedantic:
     dependency: transitive
     description:
@@ -938,10 +932,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-<<<<<<< HEAD
-  dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=2.8.1"
-=======
   dart: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"
->>>>>>> 79c2955028bc3e1793e32f5f1e4a3da447fa25d6
